@@ -7,6 +7,14 @@ module.exports = {
     ],
     darkMode: false, // or 'media' or 'class'
     theme: {
+        screens: {
+            xs: "280px",
+            sm: "640px",
+            md: "768px",
+            lg: "1024px",
+            xl: "1280px",
+            "2xl": "1536px"
+        },
         fontFamily: {
             sans: ["Roboto", "system-ui"],
             mono: ["DankMono"],
@@ -19,6 +27,12 @@ module.exports = {
             text: colors.gray[300],
             rose: colors.rose[500],
             lime: colors.lime[500]
+        },
+        container: {
+            padding: {
+                DEFAULT: "1rem",
+                sm: "4rem"
+            }
         },
         extend: {}
     },
