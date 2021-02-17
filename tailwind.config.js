@@ -1,3 +1,5 @@
+const colors = require("tailwindcss/colors")
+
 module.exports = {
     purge: [
         "./pages/**/*.{js,ts,jsx,tsx}",
@@ -5,6 +7,33 @@ module.exports = {
     ],
     darkMode: false, // or 'media' or 'class'
     theme: {
+        screens: {
+            xs: "280px",
+            sm: "640px",
+            md: "768px",
+            lg: "1024px",
+            xl: "1280px",
+            "2xl": "1536px"
+        },
+        fontFamily: {
+            sans: ["Roboto", "system-ui"],
+            mono: ["DankMono"],
+            heading: ["Montserrat"]
+        },
+        colors: {
+            primary: colors.gray[500],
+            subtitle: "#545454",
+            heading: "#3B3B3B",
+            text: colors.gray[300],
+            rose: colors.rose[500],
+            lime: colors.lime[500]
+        },
+        container: {
+            padding: {
+                DEFAULT: "1rem",
+                sm: "4rem"
+            }
+        },
         extend: {}
     },
     variants: {
