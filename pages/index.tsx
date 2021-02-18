@@ -1,19 +1,47 @@
+import { GetStaticPaths, GetStaticProps } from "next"
+import { getAllPosts } from "../lib/api"
+import PostType from "../types/post"
 import Head from "next/head"
 import Header from "../components/Header"
 
-export default function Home() {
-    return (
-        <div>
-            <Head>
-                <title>Create Next App</title>
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
+type HomeProps = {
+  posts: PostType[]
+}
 
-            <main>
-                <Header />
-            </main>
+export default function Home({ posts }: HomeProps) {
+  return (
+    <div>
+      <Head>
+        <title>Create Next App</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-            <footer></footer>
-        </div>
-    )
+      <main>
+        <Header />
+        <ul>
+          {posts.map(post => (
+            <li className="p-4">
+              <h1 className="text-xl text-heading font-extrabold font-heading">
+                {post.title}
+              </h1>
+              <h2>{post.date}</h2>
+              <p>{post.description}</p>
+            </li>
+          ))}
+        </ul>
+      </main>
+
+      <footer></footer>
+    </div>
+  )
+}
+
+export async function getStaticProps<GetStaticProps>() {
+  const posts = getAllPosts(["slug", "title", "date", "description"])
+
+  return {
+    props: {
+      posts: posts,
+    },
+  }
 }
