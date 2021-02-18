@@ -3,14 +3,15 @@ import { join } from 'path'
 import matter from 'gray-matter'
 import PostType from '../types/post'
 
-const postsDirectory = join(process.cwd(), 'posts')
+const postsDirectory = join(process.cwd(), '_posts')
 
 export function getPostSlugs() {
     return fs.readdirSync(postsDirectory)
 }
 
-export function getPostBySlug(slug: string, fields: string[]) {
-    const fullPath = join(postsDirectory, slug, `index.md`)
+export function getPostBySlug(file: string, fields: string[]) {
+    const realFilePath = file.replace(/\.md$/, '')
+    const fullPath = join(postsDirectory, `${realFilePath}.md`)
     const fileContents = fs.readFileSync(fullPath, 'utf-8')
     const { data, content } = matter(fileContents)
 
@@ -22,6 +23,8 @@ export function getPostBySlug(slug: string, fields: string[]) {
 
     fields.forEach((field) => {
         if (field === 'slug') {
+            const title: string = data['title']
+            const slug: string = title.replace(/[^A-Za-z0-9]+/g, '-').toLowerCase()
             items[field] = slug
         }
         if (field === 'content') {
@@ -35,11 +38,11 @@ export function getPostBySlug(slug: string, fields: string[]) {
     return items
 }
 
-export function getAllPosts(fields: string[] = []) {
-    const slugs = getPostSlugs()
+export function getAllPosts(fields: Array<keyof PostType>) {
+    const filenames = getPostSlugs()
 
-    const posts = slugs
-        .map(slug => getPostBySlug(slug, fields))
+    const posts = filenames
+        .map(file => getPostBySlug(file, fields))
         .sort((a, b) => a.date > b.date ? -1 : 1)
 
     return posts
