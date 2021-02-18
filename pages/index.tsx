@@ -1,4 +1,4 @@
-import { GetStaticProps, InferGetServerSidePropsType } from "next"
+import { GetStaticPaths, GetStaticProps } from "next"
 import { getAllPosts } from "../lib/api"
 import PostType from "../types/post"
 import Head from "next/head"
@@ -24,6 +24,7 @@ export default function Home({ posts }: HomeProps) {
               <h1 className="text-xl text-heading font-extrabold font-heading">
                 {post.title}
               </h1>
+              <h2>{post.date}</h2>
               <p>{post.description}</p>
             </li>
           ))}
@@ -36,14 +37,7 @@ export default function Home({ posts }: HomeProps) {
 }
 
 export async function getStaticProps<GetStaticProps>() {
-  const posts = getAllPosts([
-    "slug",
-    "title",
-    "date",
-    "description",
-    "content",
-    "published",
-  ])
+  const posts = getAllPosts(["slug", "title", "date", "description"])
 
   return {
     props: {
