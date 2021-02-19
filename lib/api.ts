@@ -24,7 +24,7 @@ export function getPostBySlug(file: string, fields: string[]) {
     fields.forEach((field) => {
         if (field === 'slug') {
             const title: string = data['title']
-            const slug: string = title.replace(/[^A-Za-z0-9]+/g, '-').toLowerCase()
+            const slug: string = encodeURIComponent(title.replace(/[^A-Za-z0-9]+/g, '-').toLowerCase())
             postData.slug = slug
         }
         if (field === 'content') {
