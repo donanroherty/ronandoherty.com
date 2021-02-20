@@ -14,7 +14,10 @@
     "postcss": "^8.2.6",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "tailwindcss": "^2.0.3"
+    "remark-parse": "^9.0.0",
+    "remark-react": "^8.0.0",
+    "tailwindcss": "^2.0.3",
+    "unified": "^9.2.0"
   },
   "devDependencies": {
     "@types/node": "^14.14.27",
