@@ -1,21 +1,32 @@
 import React from "react"
-
+import {
+  getAllPosts,
+  getFilenameFromSlug,
+  getPostByFilename,
+} from "../../lib/api"
 import { GetStaticPathsResult, GetStaticProps } from "next"
-import { useRouter } from "next/router"
+import PostType from "../../types/post"
+import { Params } from "next/dist/next-server/server/router"
 
-import { getAllPosts } from "../../lib/api"
+import PostContent from "../../components/PostContent"
 
-function Post() {
-  const router = useRouter()
-  const { slug } = router.query
+type PostProps = {
+  post: PostType
+}
 
-  return <div>Slug: {slug}</div>
+function Post({ post }: PostProps) {
+  if (!post.title || !post.content) return null
+
+  return (
+    <div>
+      <h1>{post.title}</h1>
+      <PostContent markdown={post.content} />
+    </div>
+  )
 }
 
 export async function getStaticPaths<GetStaticPaths>() {
-  const posts = getAllPosts(["slug"])
-
-  const params = posts.map(post => ({
+  const params = getAllPosts(["slug"]).map(post => ({
     params: {
       slug: post.slug,
     },
@@ -27,9 +38,16 @@ export async function getStaticPaths<GetStaticPaths>() {
   }
 }
 
-export async function getStaticProps<GetStaticProps>() {
+export async function getStaticProps<GetStaticProps>({ params }: Params) {
+  const fileName = getFilenameFromSlug(params.slug)
+  const post = fileName
+    ? getPostByFilename(fileName, ["title", "date", "content"])
+    : undefined
+
   return {
-    props: {},
+    props: {
+      post: post,
+    },
   }
 }
 
