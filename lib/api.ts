@@ -5,24 +5,21 @@ import PostType from '../types/post'
 
 const postsDirectory = join(process.cwd(), '_posts')
 
-export function getPostSlugs() {
+export function getPostFilenames() {
     return fs.readdirSync(postsDirectory)
 }
 
-export function getPostBySlug(file: string, fields: string[]) {
-    const realFilePath = file.replace(/\.md$/, '')
-    const fullPath = join(postsDirectory, `${realFilePath}.md`)
+export function getPostByFilename(filename: string, fields: string[]) {
+    const realSlug = filename.replace(/\.md$/, '')
+    const fullPath = join(postsDirectory, `${realSlug}.md`)
     const fileContents = fs.readFileSync(fullPath, 'utf-8')
     const { data, content } = matter(fileContents)
-
-    type Items = {
-        [key: string]: string
-    }
 
     let postData: Partial<PostType> = {}
 
     fields.forEach((field) => {
         if (field === 'slug') {
+            const seperatorIdx = realSlug.indexOf('--')
             const title: string = data['title']
             const slug: string = encodeURIComponent(title.replace(/[^A-Za-z0-9]+/g, '-').toLowerCase())
             postData.slug = slug
@@ -38,11 +35,22 @@ export function getPostBySlug(file: string, fields: string[]) {
     return postData
 }
 
+export function getFilenameFromSlug(slug: string) {
+    const files = getPostFilenames()
+    const slugFile = files.find(((file) => {
+        const filename = file.replace(/\.md$/, '')
+        const sepIdx = file.indexOf('--')
+        const substr = filename.substr(sepIdx + 2)
+        return encodeURIComponent(substr) === slug
+    }))
+    return slugFile
+}
+
 export function getAllPosts(fields: Array<keyof PostType>) {
-    const filenames = getPostSlugs()
+    const filenames = getPostFilenames()
 
     let posts = filenames
-        .map(file => getPostBySlug(file, fields))
+        .map(name => getPostByFilename(name, fields))
         .sort((a, b) => (a.date && b.date) ? (a.date > b.date ? -1 : 1) : 0)
 
     return posts
