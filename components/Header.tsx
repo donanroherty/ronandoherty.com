@@ -1,3 +1,4 @@
+import Link from "next/link"
 import React from "react"
 import Icon from "./Icon"
 
@@ -5,14 +6,16 @@ function Header() {
   return (
     <div className="flex-row pt-10">
       <div className="flex flex-row">
-        <div className="flex-auto">
-          <h1 className="font-heading font-extrabold text-3xl xs:text-5xl text-heading">
-            Ronan
-          </h1>
-          <h1 className="font-heading font-extrabold text-3xl xs:text-5xl text-heading">
-            Doherty
-          </h1>
-        </div>
+        <Link href="/">
+          <a className="flex-auto">
+            <h1 className="font-heading font-extrabold text-3xl xs:text-5xl text-heading">
+              Ronan
+            </h1>
+            <h1 className="font-heading font-extrabold text-3xl xs:text-5xl text-heading">
+              Doherty
+            </h1>
+          </a>
+        </Link>
 
         <div className="flex flex-col justify-between justify-items-end pt-1">
           <Icon

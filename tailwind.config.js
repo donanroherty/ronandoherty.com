@@ -27,6 +27,7 @@ module.exports = {
       lime: colors.lime[500],
     },
     container: {
+      center: true,
       padding: {
         DEFAULT: "1rem",
         sm: "4rem",
