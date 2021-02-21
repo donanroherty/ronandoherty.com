@@ -18,8 +18,8 @@ function Post({ post }: PostProps) {
   if (!post.title || !post.content) return null
 
   return (
-    <div>
-      <h1>{post.title}</h1>
+    <div className="space-y-4">
+      <div className="text-3xl font-bold text-heading">{post.title}</div>
       <PostContent markdown={post.content} />
     </div>
   )

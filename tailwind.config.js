@@ -33,7 +33,32 @@ module.exports = {
         sm: "4rem",
       },
     },
-    extend: {},
+    extend: {
+      typography: theme => ({
+        DEFAULT: {
+          css: {
+            color: "#3C3C3C",
+            h1: {
+              fontFamily: theme("fontFamily.heading"),
+              color: "#3B3B3B",
+              fontSize: "1.5rem",
+            },
+            h2: {
+              color: "#3B3B3B",
+              fontSize: "1.3rem",
+            },
+            h3: {
+              color: "#3B3B3B",
+              fontSize: "1.1rem",
+            },
+            h4: {
+              color: "#3B3B3B",
+              fontSize: "1rem",
+            },
+          },
+        },
+      }),
+    },
   },
   variants: {
     extend: {},
