@@ -27,15 +27,47 @@ module.exports = {
       lime: colors.lime[500],
     },
     container: {
+      center: true,
       padding: {
         DEFAULT: "1rem",
         sm: "4rem",
       },
     },
-    extend: {},
+    extend: {
+      typography: theme => ({
+        DEFAULT: {
+          css: {
+            body: {
+              textRendering: "optimizeLegibility",
+            },
+            color: "#3C3C3C",
+            h1: {
+              fontFamily: theme("fontFamily.heading"),
+              color: "#3B3B3B",
+              fontSize: "1.3rem",
+            },
+            h2: {
+              color: "#3B3B3B",
+              fontSize: "1.1rem",
+            },
+            h3: {
+              color: "#3B3B3B",
+              fontSize: "1rem",
+            },
+            h4: {
+              color: "#3B3B3B",
+              fontSize: ".9rem",
+            },
+            p: {
+              fontFamily: "Open Sans",
+            },
+          },
+        },
+      }),
+    },
   },
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
 }
