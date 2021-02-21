@@ -9,17 +9,18 @@ import PostType from "../../types/post"
 import { Params } from "next/dist/next-server/server/router"
 
 import PostContent from "../../components/PostContent"
+import PostPageTitleBar from "../../components/PostPageTitleBar"
 
 type PostProps = {
   post: PostType
 }
 
-function Post({ post }: PostProps) {
+function PostPage({ post }: PostProps) {
   if (!post.title || !post.content) return null
 
   return (
-    <div className="space-y-4">
-      <div className="text-3xl font-bold text-heading">{post.title}</div>
+    <div className="space-y-6 sm:space-y-12">
+      <PostPageTitleBar titleText={post.title} date={post.date} />
       <PostContent markdown={post.content} />
     </div>
   )
@@ -41,7 +42,7 @@ export async function getStaticPaths<GetStaticPaths>() {
 export async function getStaticProps<GetStaticProps>({ params }: Params) {
   const fileName = getFilenameFromSlug(params.slug)
   const post = fileName
-    ? getPostByFilename(fileName, ["title", "date", "content"])
+    ? getPostByFilename(fileName, ["title", "date", "content", "description"])
     : undefined
 
   return {
@@ -51,4 +52,4 @@ export async function getStaticProps<GetStaticProps>({ params }: Params) {
   }
 }
 
-export default Post
+export default PostPage

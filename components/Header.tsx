@@ -8,10 +8,10 @@ function Header() {
       <div className="flex flex-row">
         <Link href="/">
           <a className="flex-auto">
-            <h1 className="font-heading font-extrabold text-3xl xs:text-5xl text-heading">
+            <h1 className="font-heading font-extrabold text-4xl xs:text-5xl text-heading">
               Ronan
             </h1>
-            <h1 className="font-heading font-extrabold text-3xl xs:text-5xl text-heading">
+            <h1 className="font-heading font-extrabold text-4xl xs:text-5xl text-heading">
               Doherty
             </h1>
           </a>
