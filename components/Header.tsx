@@ -7,7 +7,7 @@ function Header() {
     <div className="flex-row pt-10">
       <div className="flex flex-row">
         <Link href="/">
-          <a className="flex-auto">
+          <a className="flex-auto -space-y-2">
             <h1 className="font-heading font-extrabold text-4xl xs:text-5xl text-heading">
               Ronan
             </h1>
@@ -22,7 +22,6 @@ function Header() {
             name="moon"
             className="w-4 xs:w-5 mx-auto box-content pt-1 pl-2 pb-1 "
           />
-
           <Icon
             name="info"
             className="w-5 xs:w-6 box-content pt-1 pl-1 pb-1 "
@@ -30,7 +29,7 @@ function Header() {
         </div>
       </div>
       <div>
-        <h2 className="font-heading font-semibold text-sm xs:text-1xl text-subtitle">
+        <h2 className="font-heading font-semibold text-sm xs:text-lg text-subtitle">
           Developer
         </h2>
       </div>
