@@ -24,7 +24,13 @@ export default function Index({ posts }: HomeProps) {
 }
 
 export async function getStaticProps<GetStaticProps>() {
-  const posts = getAllPosts(["slug", "date", "title", "description"])
+  const posts = getAllPosts([
+    "slug",
+    "date",
+    "title",
+    "description",
+    "listed",
+  ]).filter(post => post.listed !== false)
 
   return {
     props: {
