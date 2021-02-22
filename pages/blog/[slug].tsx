@@ -7,24 +7,9 @@ import {
 import { GetStaticPathsResult, GetStaticProps } from "next"
 import PostType from "../../types/post"
 import { Params } from "next/dist/next-server/server/router"
+import PostPage from "../../components/PostPage"
 
-import PostContent from "../../components/PostContent"
-import PostPageTitleBar from "../../components/PostPageTitleBar"
-
-type PostProps = {
-  post: PostType
-}
-
-function PostPage({ post }: PostProps) {
-  if (!post.title || !post.content) return null
-
-  return (
-    <div className="space-y-6 sm:space-y-12">
-      <PostPageTitleBar titleText={post.title} date={post.date} />
-      <PostContent markdown={post.content} />
-    </div>
-  )
-}
+export default PostPage
 
 export async function getStaticPaths<GetStaticPaths>() {
   const params = getAllPosts(["slug"]).map(post => ({
@@ -51,5 +36,3 @@ export async function getStaticProps<GetStaticProps>({ params }: Params) {
     },
   }
 }
-
-export default PostPage
