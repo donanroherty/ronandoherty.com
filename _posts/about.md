@@ -1,0 +1,11 @@
+---
+title: "About"
+description: ""
+date: "2021-02-22T18:50:02.200Z"
+published: true
+listed: false
+---
+
+Hi, my name's Ronan Doherty and I’m a software developer based in Ireland 🇮🇪.  I built this site to learn how to better communicate my ideas and interests.
+
+Hopefully you find something interesting here.  If you do, or dont, I'd love it if you get in touch and let me know how I can improve.
