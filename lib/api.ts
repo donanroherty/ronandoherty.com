@@ -19,7 +19,6 @@ export function getPostByFilename(filename: string, fields: string[]) {
 
     fields.forEach((field) => {
         if (field === 'slug') {
-            const seperatorIdx = realSlug.indexOf('--')
             const title: string = data['title']
             const slug: string = encodeURIComponent(title.replace(/[^A-Za-z0-9]+/g, '-').toLowerCase())
             postData.slug = slug
@@ -27,7 +26,7 @@ export function getPostByFilename(filename: string, fields: string[]) {
         if (field === 'content') {
             postData.content = content
         }
-        if (data[field]) {
+        if (data[field] !== undefined) {
             postData[field as keyof PostType] = data[field]
         }
     })
@@ -36,12 +35,18 @@ export function getPostByFilename(filename: string, fields: string[]) {
 }
 
 export function getFilenameFromSlug(slug: string) {
-    const files = getPostFilenames()
+    const files = getPostFilenames().map(file => file.replace(/\.md$/, ''))
+
+
+    if (files.find((file => file === slug)))
+        return slug
+
     const slugFile = files.find(((file) => {
-        const filename = file.replace(/\.md$/, '')
         const sepIdx = file.indexOf('--')
-        const substr = filename.substr(sepIdx + 2)
-        return encodeURIComponent(substr) === slug
+        if (sepIdx) {
+            const substr = file.substr(sepIdx + 2)
+            return encodeURIComponent(substr) === slug
+        }
     }))
     return slugFile
 }

@@ -5,6 +5,7 @@ type PostType = {
     description: string
     content: string
     published: boolean
+    listed: boolean
 }
 
 export default PostType
