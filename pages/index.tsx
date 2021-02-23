@@ -1,12 +1,11 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
-import { getAllPosts } from "../lib/api"
-import PostType from "../types/post"
+import { getAllPostFrontmatter } from "../lib/api"
 import Head from "next/head"
 import PostList from "../components/PostList"
 
 type HomeProps = {} & InferGetStaticPropsType<typeof getStaticProps>
 
-export default function Index({ posts }: HomeProps) {
+export default function Index({ postData }: HomeProps) {
   return (
     <div>
       <Head>
@@ -15,7 +14,7 @@ export default function Index({ posts }: HomeProps) {
       </Head>
 
       <main>
-        <PostList posts={posts} />
+        <PostList postsData={postData} />
       </main>
 
       <footer></footer>
@@ -24,17 +23,11 @@ export default function Index({ posts }: HomeProps) {
 }
 
 export async function getStaticProps<GetStaticProps>() {
-  const posts = getAllPosts([
-    "slug",
-    "date",
-    "title",
-    "description",
-    "listed",
-  ]).filter(post => post.listed !== false)
+  const postData = getAllPostFrontmatter("blog")
 
   return {
     props: {
-      posts: posts as PostType[],
+      postData,
     },
   }
 }

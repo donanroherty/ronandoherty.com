@@ -1,11 +1,7 @@
-type PostType = {
-    slug: string
+export type PostHeaderData = {
     title: string
     date: string
     description: string
-    content: string
     published: boolean
     listed: boolean
 }
-
-export default PostType

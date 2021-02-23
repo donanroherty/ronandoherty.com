@@ -1,42 +1,57 @@
+import React from 'react'
 import fs from 'fs'
 import { join } from 'path'
 import matter from 'gray-matter'
-import PostType from '../types/post'
+import { PostHeaderData } from '../types/post'
+import renderToString from 'next-mdx-remote/render-to-string'
 
-const postsDirectory = join(process.cwd(), '_posts')
+type ContentType = "blog" | "pages"
 
-export function getPostFilenames() {
-    return fs.readdirSync(postsDirectory)
+function getPath(dir: ContentType) {
+    return join(process.cwd(), '_content', dir)
 }
 
-export function getPostByFilename(filename: string, fields: string[]) {
-    const realSlug = filename.replace(/\.md$/, '')
-    const fullPath = join(postsDirectory, `${realSlug}.md`)
-    const fileContents = fs.readFileSync(fullPath, 'utf-8')
-    const { data, content } = matter(fileContents)
+export function getFiles(dir: ContentType) {
+    return fs.readdirSync(getPath(dir))
+}
 
-    let postData: Partial<PostType> = {}
+export async function getFileBySlug(slug: string, dir: ContentType) {
+    const file = fs.readFileSync(join(getPath(dir), `${slug}.mdx`), 'utf-8')
+    const { data, content } = matter(file)
 
-    fields.forEach((field) => {
-        if (field === 'slug') {
-            const title: string = data['title']
-            const slug: string = encodeURIComponent(title.replace(/[^A-Za-z0-9]+/g, '-').toLowerCase())
-            postData.slug = slug
-        }
-        if (field === 'content') {
-            postData.content = content
-        }
-        if (data[field] !== undefined) {
-            postData[field as keyof PostType] = data[field]
+    const mdxSource = await renderToString(content, {
+        components: { name: React.Component },
+        mdxOptions: {
         }
     })
 
-    return postData
+    return {
+        mdxSource,
+        slug,
+        frontmatter: data as PostHeaderData
+    }
 }
 
-export function getFilenameFromSlug(slug: string) {
-    const files = getPostFilenames().map(file => file.replace(/\.md$/, ''))
+export function getAllPostFrontmatter(dir: ContentType) {
+    const files: Array<{ slug: string, frontmatter: PostHeaderData }> = getFiles(dir).map(filename => {
+        const slug = filename.replace(/\.mdx$/, '')
+        const file = fs.readFileSync(join(getPath(dir), filename), 'utf-8')
+        const { data } = matter(file)
+        const frontmatter: PostHeaderData = {
+            title: data.title,
+            date: data.date,
+            description: data.description,
+            published: data.published,
+            listed: data.listed,
+        }
+        return { slug, frontmatter }
+    })
 
+    return files
+}
+
+export function getFilenameFromSlug(slug: string, dir: ContentType) {
+    const files = getFiles(dir).map(file => file.replace(/\.md$/, ''))
 
     if (files.find((file => file === slug)))
         return slug
@@ -49,14 +64,4 @@ export function getFilenameFromSlug(slug: string) {
         }
     }))
     return slugFile
-}
-
-export function getAllPosts(fields: Array<keyof PostType>) {
-    const filenames = getPostFilenames()
-
-    let posts = filenames
-        .map(name => getPostByFilename(name, fields))
-        .sort((a, b) => (a.date && b.date) ? (a.date > b.date ? -1 : 1) : 0)
-
-    return posts
 }
