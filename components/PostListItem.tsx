@@ -1,13 +1,14 @@
 import React from "react"
-import PostType from "../types/post"
+import { PostHeaderData } from "../types/post"
 import Link from "next/link"
 import VerticalDateWidget from "./VerticalDateWidget"
 
 type PostListItemProps = {
-  post: PostType
+  slug: string
+  post: PostHeaderData
 }
 
-function PostListItem({ post }: PostListItemProps) {
+function PostListItem({ post, slug }: PostListItemProps) {
   return (
     <li className="w-full">
       <div className="flex flex-row space-x-4">
@@ -16,7 +17,7 @@ function PostListItem({ post }: PostListItemProps) {
         </div>
 
         <div>
-          <Link href={`/blog/${encodeURIComponent(post.slug)}`}>
+          <Link href={`/blog/${encodeURIComponent(slug)}`}>
             <a>
               <h1 className="text-lg xs:text-xl text-heading font-extrabold font-heading">
                 {post.title}

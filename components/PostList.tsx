@@ -1,16 +1,20 @@
 import React from "react"
-import PostType from "../types/post"
+import { PostHeaderData } from "../types/post"
 import PostListItem from "./PostListItem"
 
 type PostListProps = {
-  posts: PostType[]
+  postsData: Array<{ slug: string; frontmatter: PostHeaderData }>
 }
 
-function PostList({ posts }: PostListProps) {
+function PostList({ postsData }: PostListProps) {
   return (
     <ul className="space-y-10">
-      {posts.map(post => (
-        <PostListItem key={post.slug} post={post} />
+      {postsData.map(data => (
+        <PostListItem
+          key={data.slug}
+          slug={data.slug}
+          post={data.frontmatter}
+        />
       ))}
     </ul>
   )

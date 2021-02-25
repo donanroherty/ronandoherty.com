@@ -1,19 +1,17 @@
 import React from "react"
-import PostType from "../types/post"
-import PostContent from "./PostContent"
+import { PostHeaderData } from "../types/post"
 import PostPageTitleBar from "./PostPageTitleBar"
 
 type PostProps = {
-  post: PostType
+  frontmatter: PostHeaderData
+  children: React.ReactNode
 }
 
-export default function PostPage({ post }: PostProps) {
-  if (!post.title || !post.content) return null
-
+export default function PostPage({ frontmatter, children }: PostProps) {
   return (
     <div className="space-y-6 sm:space-y-12">
-      <PostPageTitleBar titleText={post.title} date={post.date} />
-      <PostContent markdown={post.content} />
+      <PostPageTitleBar titleText={frontmatter.title} date={frontmatter.date} />
+      <article className="prose lg:prose-xl">{children}</article>
     </div>
   )
 }
