@@ -3,6 +3,8 @@ import React from "react"
 import Icon from "./Icon"
 
 function Header() {
+  const { toggleTheme } = useTheme()
+
   return (
     <div className="flex-row pt-10">
       <div className="flex flex-row">
