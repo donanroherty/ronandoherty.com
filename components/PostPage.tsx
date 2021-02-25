@@ -1,6 +1,5 @@
 import React from "react"
 import { PostHeaderData } from "../types/post"
-import PostContent from "./PostContent"
 import PostPageTitleBar from "./PostPageTitleBar"
 
 type PostProps = {

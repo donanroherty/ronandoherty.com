@@ -1,5 +1,5 @@
 import React from "react"
-import PostHeaderData from "../types/post"
+import { PostHeaderData } from "../types/post"
 import Link from "next/link"
 import VerticalDateWidget from "./VerticalDateWidget"
 

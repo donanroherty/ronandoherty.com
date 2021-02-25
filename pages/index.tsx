@@ -1,4 +1,4 @@
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
+import { GetStaticProps, InferGetStaticPropsType } from "next"
 import { getAllPostFrontmatter } from "../lib/api"
 import Head from "next/head"
 import PostList from "../components/PostList"
