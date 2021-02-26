@@ -1,7 +1,7 @@
 import Link from "next/link"
 import React from "react"
 import Icon from "./Icon"
-import useTheme from "./ThemeProvider"
+import useTheme from "../state/ThemeProvider"
 
 function Header() {
   const { toggleTheme } = useTheme()
