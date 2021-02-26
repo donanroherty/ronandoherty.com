@@ -2,72 +2,103 @@ const colors = require("tailwindcss/colors")
 
 module.exports = {
   purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: "class",
   theme: {
-    screens: {
-      xs: "280px",
-      sm: "640px",
-      md: "768px",
-      lg: "1024px",
-      xl: "1280px",
-      "2xl": "1536px",
-    },
-    fontFamily: {
-      heading: ["Montserrat"],
-      body: ["Open Sans", "system-ui"],
-      mono: ["DankMono"],
-    },
-    colors: {
-      primary: colors.gray[500],
-      subtitle: "#545454",
-      heading: "#3B3B3B",
-      body: "#3C3C3C",
-      text: colors.gray[300],
-      rose: colors.rose[500],
-      lime: colors.lime[500],
-    },
-    container: {
-      center: true,
-      padding: {
-        DEFAULT: "1rem",
-        sm: "4rem",
-      },
-    },
     extend: {
+      screens: {
+        xs: "280px",
+        sm: "715px",
+      },
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: "1rem",
+          sm: "4rem",
+        },
+      },
+      backgroundColor: "bg-green-700",
+      fontFamily: {
+        heading: ["Montserrat"],
+        body: ["Open Sans", "system-ui"],
+        mono: ["DankMono"],
+      },
+      colors: {
+        heading: "#3B3B3B",
+        subtitle: "#545454",
+        body: "#3C3C3C",
+
+        headingDark: colors.gray[300],
+        subtitleDark: colors.gray[500],
+        bodyDark: colors.gray[400],
+      },
+
       typography: theme => ({
         DEFAULT: {
           css: {
-            body: {
-              textRendering: "optimizeLegibility",
-            },
-            color: "#3C3C3C",
-            h1: {
-              fontFamily: theme("fontFamily.heading"),
-              color: "#3B3B3B",
-              fontSize: "1.3rem",
-            },
-            h2: {
-              color: "#3B3B3B",
-              fontSize: "1.1rem",
-            },
-            h3: {
-              color: "#3B3B3B",
-              fontSize: "1rem",
-            },
-            h4: {
-              color: "#3B3B3B",
-              fontSize: ".9rem",
-            },
-            p: {
-              fontFamily: "Open Sans",
-            },
+            ...typographyThemeCommon(theme),
+            ...typographyThemeLight(theme),
+          },
+        },
+        dark: {
+          css: {
+            ...typographyThemeCommon(theme),
+            ...typographyThemeDark(theme),
           },
         },
       }),
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      typography: ["dark"],
+    },
   },
   plugins: [require("@tailwindcss/typography")],
+}
+
+function typographyThemeCommon(theme) {
+  return {
+    body: {
+      textRendering: "optimizeLegibility",
+    },
+    p: {
+      fontFamily: "Open Sans",
+    },
+    h1: {
+      fontFamily: theme("fontFamily.heading"),
+      fontSize: "1.3rem",
+    },
+    h2: {
+      fontFamily: theme("fontFamily.heading"),
+      fontSize: "1.1rem",
+    },
+    h3: {
+      fontFamily: theme("fontFamily.heading"),
+      fontSize: "1rem",
+    },
+    h4: {
+      fontFamily: theme("fontFamily.heading"),
+      fontSize: ".9rem",
+    },
+  }
+}
+
+function typographyThemeLight(theme) {
+  return {
+    p: { color: theme("colors.body") },
+    h1: { color: theme("colors.heading") },
+    h2: { color: theme("colors.heading") },
+    h3: { color: theme("colors.heading") },
+    h4: { color: theme("colors.heading") },
+  }
+}
+
+function typographyThemeDark(theme) {
+  return {
+    p: { color: theme("colors.bodyDark") },
+    h1: { color: theme("colors.headingDark") },
+    h2: { color: theme("colors.headingDark") },
+    h3: { color: theme("colors.headingDark") },
+    h4: { color: theme("colors.headingDark") },
+  }
 }

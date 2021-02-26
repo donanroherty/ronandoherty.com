@@ -1,7 +1,7 @@
 import React from "react"
 import { PostHeaderData } from "../types/post"
 import Link from "next/link"
-import VerticalDateWidget from "./VerticalDateWidget"
+import DateWidget from "./DateWidget"
 
 type PostListItemProps = {
   slug: string
@@ -13,21 +13,21 @@ function PostListItem({ post, slug }: PostListItemProps) {
     <li className="w-full">
       <div className="flex flex-row space-x-4">
         <div className="my-auto">
-          <VerticalDateWidget date={new Date(post.date)} />
+          <DateWidget date={post.date} vertical />
         </div>
 
         <div>
           <Link href={`/blog/${encodeURIComponent(slug)}`}>
             <a>
-              <h1 className="text-lg xs:text-xl text-heading font-extrabold font-heading">
+              <div className="text-lg xs:text-xl text-heading dark:text-headingDark transition-colors duration-500 font-extrabold font-heading">
                 {post.title}
-              </h1>
+              </div>
             </a>
           </Link>
 
-          <p className="font-body text-base xs:text-lg text-subtitle">
+          <div className="font-body text-base xs:text-lg text-subtitle dark:text-subtitleDark transition-colors duration-500">
             {post.description}
-          </p>
+          </div>
         </div>
       </div>
     </li>
