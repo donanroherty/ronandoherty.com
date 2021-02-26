@@ -1,7 +1,7 @@
 import React from "react"
 import { PostHeaderData } from "../types/post"
 import Link from "next/link"
-import VerticalDateWidget from "./VerticalDateWidget"
+import HorizontalDateWidget from "./HorizontalDateWidget"
 
 type PostListItemProps = {
   slug: string
@@ -13,7 +13,7 @@ function PostListItem({ post, slug }: PostListItemProps) {
     <li className="w-full">
       <div className="flex flex-row space-x-4">
         <div className="my-auto">
-          <VerticalDateWidget date={new Date(post.date)} />
+          <HorizontalDateWidget date={post.date} orient="vertical" />
         </div>
 
         <div>

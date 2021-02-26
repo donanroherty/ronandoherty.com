@@ -12,8 +12,10 @@ export default function PostPageTitle({
 }: Props): ReactElement {
   return (
     <div className="space-y-1">
-      <div className="text-3xl font-bold text-heading">{titleText}</div>
-      <HorizontalDateWidget date={date} />
+      <div className="text-3xl font-bold text-heading dark:text-headingDark">
+        {titleText}
+      </div>
+      <HorizontalDateWidget date={date} orient="horizontal" />
     </div>
   )
 }
