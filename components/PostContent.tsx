@@ -17,5 +17,7 @@ export default function PostBody({ markdown }: PostContentProps) {
       },
     })
     .processSync(markdown).result as JSX.Element
-  return <article className="prose lg:prose-xl">{content}</article>
+  return (
+    <article className="prose lg:prose-xl dark:prose-dark">{content}</article>
+  )
 }

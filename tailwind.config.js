@@ -40,22 +40,50 @@ module.exports = {
             body: {
               textRendering: "optimizeLegibility",
             },
-            color: "#3C3C3C",
+            color: theme("colors.body"),
             h1: {
               fontFamily: theme("fontFamily.heading"),
-              color: "#3B3B3B",
+              color: theme("colors.heading"),
               fontSize: "1.3rem",
             },
             h2: {
-              color: "#3B3B3B",
+              color: theme("colors.heading"),
               fontSize: "1.1rem",
             },
             h3: {
-              color: "#3B3B3B",
+              color: theme("colors.heading"),
               fontSize: "1rem",
             },
             h4: {
-              color: "#3B3B3B",
+              color: theme("colors.heading"),
+              fontSize: ".9rem",
+            },
+            p: {
+              fontFamily: "Open Sans",
+            },
+          },
+        },
+        dark: {
+          css: {
+            body: {
+              textRendering: "optimizeLegibility",
+            },
+            color: theme("colorsDarkMode.body"),
+            h1: {
+              fontFamily: theme("fontFamily.heading"),
+              color: theme("colorsDarkMode.heading"),
+              fontSize: "1.3rem",
+            },
+            h2: {
+              color: theme("colorsDarkMode.heading"),
+              fontSize: "1.1rem",
+            },
+            h3: {
+              color: theme("colorsDarkMode.heading"),
+              fontSize: "1rem",
+            },
+            h4: {
+              color: theme("colorsDarkMode.heading"),
               fontSize: ".9rem",
             },
             p: {
@@ -67,7 +95,9 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      typography: ["dark"],
+    },
   },
   plugins: [require("@tailwindcss/typography")],
 }
