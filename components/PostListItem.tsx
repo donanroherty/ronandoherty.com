@@ -19,15 +19,15 @@ function PostListItem({ post, slug }: PostListItemProps) {
         <div>
           <Link href={`/blog/${encodeURIComponent(slug)}`}>
             <a>
-              <h1 className="text-lg xs:text-xl text-heading dark:text-headingDark font-extrabold font-heading">
+              <div className="text-lg xs:text-xl text-heading dark:text-headingDark transition-colors duration-500 font-extrabold font-heading">
                 {post.title}
-              </h1>
+              </div>
             </a>
           </Link>
 
-          <p className="font-body text-base xs:text-lg text-subtitle dark:text-subtitleDark">
+          <div className="font-body text-base xs:text-lg text-subtitle dark:text-subtitleDark transition-colors duration-500">
             {post.description}
-          </p>
+          </div>
         </div>
       </div>
     </li>

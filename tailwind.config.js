@@ -7,7 +7,7 @@ module.exports = {
     extend: {
       screens: {
         xs: "280px",
-        // "dark-mode": { raw: "(prefers-color-scheme: dark)" },
+        sm: "715px",
       },
       container: {
         center: true,
@@ -23,79 +23,26 @@ module.exports = {
         mono: ["DankMono"],
       },
       colors: {
-        primary: colors.gray[500],
-        subtitle: "#545454",
         heading: "#3B3B3B",
+        subtitle: "#545454",
         body: "#3C3C3C",
 
-        primaryDark: colors.gray[200],
-        subtitleDark: colors.gray[200],
-        headingDark: colors.gray[200],
-        bodyDark: colors.gray[200],
+        headingDark: colors.gray[300],
+        subtitleDark: colors.gray[500],
+        bodyDark: colors.gray[400],
       },
 
       typography: theme => ({
         DEFAULT: {
           css: {
-            body: {
-              textRendering: "optimizeLegibility",
-            },
-            p: {
-              fontFamily: "Open Sans",
-              color: theme("colors.body"),
-            },
-            h1: {
-              fontFamily: theme("fontFamily.heading"),
-              color: theme("colors.heading"),
-              fontSize: "1.3rem",
-            },
-            h2: {
-              fontFamily: theme("fontFamily.heading"),
-
-              color: theme("colors.heading"),
-              fontSize: "1.1rem",
-            },
-            h3: {
-              fontFamily: theme("fontFamily.heading"),
-              color: theme("colors.heading"),
-              fontSize: "1rem",
-            },
-            h4: {
-              fontFamily: theme("fontFamily.heading"),
-              color: theme("colors.heading"),
-              fontSize: ".9rem",
-            },
+            ...typographyThemeCommon(theme),
+            ...typographyThemeLight(theme),
           },
         },
         dark: {
           css: {
-            body: {
-              textRendering: "optimizeLegibility",
-            },
-            p: {
-              fontFamily: "Open Sans",
-              color: theme("colors.bodyDark"),
-            },
-            h1: {
-              fontFamily: theme("fontFamily.heading"),
-              color: theme("colors.headingDark"),
-              fontSize: "1.3rem",
-            },
-            h2: {
-              fontFamily: theme("fontFamily.heading"),
-              color: theme("colors.headingDark"),
-              fontSize: "1.1rem",
-            },
-            h3: {
-              fontFamily: theme("fontFamily.heading"),
-              color: theme("colors.headingDark"),
-              fontSize: "1rem",
-            },
-            h4: {
-              fontFamily: theme("fontFamily.heading"),
-              color: theme("colors.headingDark"),
-              fontSize: ".9rem",
-            },
+            ...typographyThemeCommon(theme),
+            ...typographyThemeDark(theme),
           },
         },
       }),
@@ -107,4 +54,51 @@ module.exports = {
     },
   },
   plugins: [require("@tailwindcss/typography")],
+}
+
+function typographyThemeCommon(theme) {
+  return {
+    body: {
+      textRendering: "optimizeLegibility",
+    },
+    p: {
+      fontFamily: "Open Sans",
+    },
+    h1: {
+      fontFamily: theme("fontFamily.heading"),
+      fontSize: "1.3rem",
+    },
+    h2: {
+      fontFamily: theme("fontFamily.heading"),
+      fontSize: "1.1rem",
+    },
+    h3: {
+      fontFamily: theme("fontFamily.heading"),
+      fontSize: "1rem",
+    },
+    h4: {
+      fontFamily: theme("fontFamily.heading"),
+      fontSize: ".9rem",
+    },
+  }
+}
+
+function typographyThemeLight(theme) {
+  return {
+    p: { color: theme("colors.body") },
+    h1: { color: theme("colors.heading") },
+    h2: { color: theme("colors.heading") },
+    h3: { color: theme("colors.heading") },
+    h4: { color: theme("colors.heading") },
+  }
+}
+
+function typographyThemeDark(theme) {
+  return {
+    p: { color: theme("colors.bodyDark") },
+    h1: { color: theme("colors.headingDark") },
+    h2: { color: theme("colors.headingDark") },
+    h3: { color: theme("colors.headingDark") },
+    h4: { color: theme("colors.headingDark") },
+  }
 }

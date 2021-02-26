@@ -13,11 +13,11 @@ function Header() {
         <div>
           <Link href="/">
             <a className="flex-auto -space-y-2">
-              <div className="select-none font-heading font-extrabold text-4xl xs:text-5xl text-heading dark:text-headingDark">
+              <div className="select-none font-heading font-extrabold text-4xl xs:text-5xl text-heading dark:text-headingDark transition-colors duration-500">
                 Ronan
               </div>
 
-              <div className="select-none font-heading font-extrabold text-4xl xs:text-5xl text-heading dark:text-headingDark">
+              <div className="select-none font-heading font-extrabold text-4xl xs:text-5xl text-heading dark:text-headingDark transition-colors duration-500">
                 Doherty
               </div>
             </a>
@@ -28,14 +28,14 @@ function Header() {
           <div onClick={toggleTheme}>
             <Icon
               name="moon"
-              className="w-4 xs:w-5 mx-auto box-content pt-1 pl-2 pb-1"
+              className="w-4 xs:w-5 mx-auto box-content pt-1 pl-2 pb-1 "
             />
           </div>
           <Link href="/about">
             <a>
               <Icon
                 name="info"
-                className="w-5 xs:w-6 box-content pt-1 pl-1 pb-1"
+                className="w-5 xs:w-6 box-content pt-1 pl-1 pb-1 "
               />
             </a>
           </Link>
@@ -44,7 +44,7 @@ function Header() {
 
       {/* Developer */}
       <div>
-        <div className="font-heading font-semibold text-sm xs:text-lg text-subtitle dark:text-subtitleDark">
+        <div className="font-heading font-semibold text-sm xs:text-lg text-subtitle dark:text-subtitleDark transition-colors duration-500">
           Developer
         </div>
       </div>

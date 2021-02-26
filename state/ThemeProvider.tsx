@@ -20,7 +20,6 @@ function ThemeProvider(props: any) {
 
   function toggleTheme() {
     setTheme(theme === Theme.light ? Theme.dark : Theme.light)
-    console.log(theme)
   }
 
   useEffect(

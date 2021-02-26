@@ -12,7 +12,7 @@ export default function PostPageTitle({
 }: Props): ReactElement {
   return (
     <div className="space-y-1">
-      <div className="text-3xl font-bold text-heading dark:text-headingDark">
+      <div className="text-3xl font-bold text-heading dark:text-headingDark transition-colors duration-500">
         {titleText}
       </div>
       <DateWidget date={date} vertical={false} />
