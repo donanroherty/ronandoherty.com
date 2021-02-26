@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react"
-import HorizontalDateWidget from "./HorizontalDateWidget"
+import DateWidget from "./DateWidget"
 
 interface Props {
   titleText: string
@@ -15,7 +15,7 @@ export default function PostPageTitle({
       <div className="text-3xl font-bold text-heading dark:text-headingDark">
         {titleText}
       </div>
-      <HorizontalDateWidget date={date} orient="horizontal" />
+      <DateWidget date={date} vertical={false} />
     </div>
   )
 }
