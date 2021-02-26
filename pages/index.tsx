@@ -13,9 +13,7 @@ export default function Index({ postData }: HomeProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <PostList postsData={postData} />
-      </main>
+      <PostList postsData={postData} />
 
       <footer></footer>
     </div>

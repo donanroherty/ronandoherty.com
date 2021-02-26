@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react"
-
-enum Theme {
-  light,
-  dark,
-}
+import { Theme } from "../types/theme"
 
 type ThemeProviderType = {
-  theme: Theme
   toggleTheme: () => void
 }
 
