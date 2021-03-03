@@ -6,6 +6,7 @@ import PostPage from "../../components/PostPage"
 import hydrate from "next-mdx-remote/hydrate"
 import { MdxRemote } from "next-mdx-remote/types"
 import { PostHeaderData } from "../../types/post"
+import MDXComponents from "../../components/MDXComponents"
 
 type BlogPropTypes = {
   mdxSource: MdxRemote.Source
@@ -14,7 +15,9 @@ type BlogPropTypes = {
 }
 
 export default function Blog({ mdxSource, slug, frontmatter }: BlogPropTypes) {
-  const content = hydrate(mdxSource, {})
+  const content = hydrate(mdxSource, {
+    components: MDXComponents,
+  })
   return <PostPage frontmatter={frontmatter}>{content}</PostPage>
 }
 
