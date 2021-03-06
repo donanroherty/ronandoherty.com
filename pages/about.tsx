@@ -7,6 +7,7 @@ import { MdxRemote } from "next-mdx-remote/types"
 import PostPage from "../components/PostPage"
 import { PostHeaderData } from "../types/post"
 import MDXComponents from "../components/MDXComponents"
+import ContactForm from "../components/ContactForm"
 
 type AboutPropTypes = {
   mdxSource: MdxRemote.Source
@@ -19,13 +20,12 @@ export default function About({
   slug,
   frontmatter,
 }: AboutPropTypes) {
-  const content = hydrate(mdxSource, {
-    components: MDXComponents,
-  })
+  const content = hydrate(mdxSource, { components: MDXComponents })
   return (
-    <PostPage frontmatter={frontmatter} hideDate>
-      {content}
-    </PostPage>
+    <div>
+      <PostPage frontmatter={frontmatter}>{content}</PostPage>
+      <ContactForm />
+    </div>
   )
 }
 
