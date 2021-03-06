@@ -19,10 +19,10 @@ function ContactForm() {
         {({ handleSubmit, values, isSubmitting, handleChange, handleBlur }) => (
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col space-y-2 text-body"
+            className="grid space-y-2 text-body justify-items-stretch mt-3"
           >
-            <div className="flex flex-col">
-              <label className="font-semibold">Email</label>
+            <div className="flex flex-col sm:flex-row">
+              <label className="font-semibold sm:w-32">Email</label>
               <input
                 type="email"
                 name="email"
@@ -33,22 +33,25 @@ function ContactForm() {
                 className="bg-gray-200 border-gray-300 border from-gray-100 pl-3 pr-3 w-full h-9 rounded-tl-sm rounded-tr-3xl rounded-br-sm rounded-bl-sm focus:outline-none focus:border-gray-400"
               />
             </div>
-            <div className="flex flex-col">
-              <label className="font-semibold">Message</label>
+
+            <div className="flex flex-col sm:flex-row">
+              <label className="font-semibold sm:w-32">Message</label>
               <textarea
                 name="message"
                 value={values.message}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                placeholder="Enter a message..."
                 className="bg-gray-200 border-gray-300 border from-gray-100 pl-3 pr-3 pt-2 pb-2 w-full rounded-tl-sm rounded-tr-sm rounded-br-sm rounded-bl-sm h-32 focus:outline-none focus:border-gray-400"
               />
             </div>
+
             <button
               type="submit"
               disabled={isSubmitting}
-              className="bg-heading rounded-tl-sm rounded-tr-sm rounded-br-3xl rounded-bl-sm h-9 text-white"
+              className="bg-heading hover:bg-subtitle rounded-tl-sm rounded-tr-sm rounded-br-3xl rounded-bl-sm h-9 w-full sm:w-44 text-white justify-self-end"
             >
-              Send
+              <div className="pl-5 float-left">Send</div>
             </button>
           </form>
         )}
