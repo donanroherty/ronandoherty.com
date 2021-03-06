@@ -22,8 +22,10 @@ export default function About({
 }: AboutPropTypes) {
   const content = hydrate(mdxSource, { components: MDXComponents })
   return (
-    <div>
-      <PostPage frontmatter={frontmatter}>{content}</PostPage>
+    <div className="space-y-6">
+      <PostPage frontmatter={frontmatter} hideDate>
+        {content}
+      </PostPage>
       <ContactForm />
     </div>
   )

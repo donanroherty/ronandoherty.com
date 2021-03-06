@@ -31,7 +31,6 @@ module.exports = {
         subtitleDark: colors.gray[500],
         bodyDark: colors.gray[400],
       },
-
       typography: theme => ({
         DEFAULT: {
           css: {
