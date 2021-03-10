@@ -1,8 +1,21 @@
 import { Formik } from "formik"
+import { ContactFormType } from "../types/forms"
 
 function ContactForm() {
-  function handleFormSubmit() {
-    console.log("submitted")
+  async function handleFormSubmit(values: ContactFormType) {
+    const body = {
+      ...values,
+    }
+
+    const res = await fetch("/api/contact", {
+      method: "POST",
+
+      body: JSON.stringify(body),
+    })
+
+    const json = await res.json()
+
+    console.log(json)
   }
 
   function StyledInput(props: any) {

@@ -34,14 +34,14 @@ module.exports = {
       typography: theme => ({
         DEFAULT: {
           css: {
-            ...typographyThemeCommon(theme),
             ...typographyThemeLight(theme),
+            ...typographyThemeCommon(theme),
           },
         },
         dark: {
           css: {
-            ...typographyThemeCommon(theme),
             ...typographyThemeDark(theme),
+            ...typographyThemeCommon(theme),
           },
         },
       }),
