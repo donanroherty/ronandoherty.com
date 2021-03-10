@@ -10,7 +10,6 @@ export default function Index({ postData }: HomeProps) {
     <div>
       <Head>
         <title>RonanDohertyBlog</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <PostList postsData={postData} />
