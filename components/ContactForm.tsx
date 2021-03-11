@@ -6,13 +6,10 @@ function ContactForm() {
     const body = {
       ...values,
     }
-
     const res = await fetch("/api/contact", {
       method: "POST",
-
       body: JSON.stringify(body),
     })
-
     const json = await res.json()
 
     console.log(json)
