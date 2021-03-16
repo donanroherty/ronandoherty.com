@@ -1,5 +1,6 @@
 import { Formik } from "formik"
 import { ContactFormType } from "../types/forms"
+import * as Yup from "yup"
 
 function ContactForm() {
   async function handleFormSubmit(values: ContactFormType) {
@@ -15,9 +16,10 @@ function ContactForm() {
     console.log(json)
   }
 
-  function StyledInput(props: any) {
-    return <input className="" />
-  }
+  const contactSchema = Yup.object().shape({
+    email: Yup.string().email("Invalid email").required("Required"),
+    message: Yup.string().min(10, "10 chars min").required("Required"),
+  })
 
   return (
     <div className="pb-10">
@@ -25,27 +27,53 @@ function ContactForm() {
       <Formik
         initialValues={{ email: "", message: "" }}
         onSubmit={handleFormSubmit}
+        validationSchema={contactSchema}
       >
-        {({ handleSubmit, values, isSubmitting, handleChange, handleBlur }) => (
+        {({
+          handleSubmit,
+          values,
+          isSubmitting,
+          handleChange,
+          handleBlur,
+          errors,
+        }) => (
           <form
             onSubmit={handleSubmit}
             className="grid space-y-2 text-body justify-items-stretch mt-3"
           >
             <div className="flex flex-col sm:flex-row">
-              <label className="font-semibold sm:w-32">Email</label>
-              <input
-                type="email"
-                name="email"
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                placeholder="you@exexample.com"
-                className="bg-gray-200 border-gray-300 border from-gray-100 pl-3 pr-3 w-full h-9 rounded-tl-sm rounded-tr-3xl rounded-br-sm rounded-bl-sm focus:outline-none focus:border-gray-400"
-              />
+              <div className="sm:w-32 flex sm:flex-col flex-row align-top">
+                <label className="font-semibold">Email</label>
+                <div className="my-auto pl-3 sm:my-0 sm:pl-0">
+                  {errors.email && (
+                    <div className="text-xs text-error sm:absolute">
+                      {errors.email}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="w-full">
+                <input
+                  // type="email"
+                  name="email"
+                  value={values.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder="you@exexample.com"
+                  className="bg-gray-200 border-gray-300 border from-gray-100 pl-3 pr-3 w-full h-9 rounded-tl-sm rounded-tr-3xl rounded-br-sm rounded-bl-sm focus:outline-none focus:border-gray-400"
+                />
+              </div>
             </div>
 
             <div className="flex flex-col sm:flex-row">
-              <label className="font-semibold sm:w-32">Message</label>
+              <div className="sm:w-32 flex sm:flex-col flex-row align-top">
+                <label className="font-semibold">Message</label>
+                <div className="my-auto pl-3 sm:my-0 sm:pl-0">
+                  {errors.message && (
+                    <div className="text-xs text-error">{errors.message}</div>
+                  )}
+                </div>
+              </div>
               <textarea
                 name="message"
                 value={values.message}
