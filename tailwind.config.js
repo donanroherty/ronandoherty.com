@@ -26,23 +26,23 @@ module.exports = {
         heading: "#3B3B3B",
         subtitle: "#545454",
         body: "#3C3C3C",
+        error: colors.red[600],
 
         headingDark: colors.gray[300],
         subtitleDark: colors.gray[500],
         bodyDark: colors.gray[400],
       },
-
-      typography: theme => ({
+      typography: (theme) => ({
         DEFAULT: {
           css: {
-            ...typographyThemeCommon(theme),
             ...typographyThemeLight(theme),
+            ...typographyThemeCommon(theme),
           },
         },
         dark: {
           css: {
-            ...typographyThemeCommon(theme),
             ...typographyThemeDark(theme),
+            ...typographyThemeCommon(theme),
           },
         },
       }),
