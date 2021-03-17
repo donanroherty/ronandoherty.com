@@ -16,6 +16,9 @@ module.exports = {
           sm: "4rem",
         },
       },
+      gridTemplateRows: {
+        layout: "auto 1fr auto",
+      },
       backgroundColor: "bg-green-700",
       fontFamily: {
         heading: ["Montserrat"],
