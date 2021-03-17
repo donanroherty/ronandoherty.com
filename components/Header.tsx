@@ -8,7 +8,7 @@ function Header() {
 
   return (
     <div className="pt-10">
-      <div className="flex flex-row justify-between ">
+      <div className="flex flex-row justify-between">
         {/* Brand */}
         <div>
           <Link href="/">
@@ -24,18 +24,18 @@ function Header() {
           </Link>
         </div>
         {/* Buttons */}
-        <div className="flex flex-col justify-between justify-items-end pt-1">
-          <div onClick={toggleTheme}>
+        <div className="flex flex-col justify-between justify-items-end pt-1 h-full mt-auto">
+          {/* <div onClick={toggleTheme}>
             <Icon
               name="moon"
               className="w-4 xs:w-5 mx-auto box-content pt-1 pl-2 pb-1 "
             />
-          </div>
+          </div> */}
           <Link href="/about">
             <a>
               <Icon
                 name="info"
-                className="w-5 xs:w-6 box-content pt-1 pl-1 pb-1 "
+                className="w-5 xs:w-6 box-content pt-1 pl-1 pb-1"
               />
             </a>
           </Link>
