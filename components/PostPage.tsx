@@ -16,7 +16,7 @@ export default function PostPage({
   return (
     <div className="space-y-6 sm:space-y-12">
       <div className="space-y-1">
-        <div className="text-3xl font-bold text-heading dark:text-headingDark transition-colors duration-500">
+        <div className="text-4xl font-bold text-heading dark:text-headingDark transition-colors duration-500">
           {frontmatter.title}
         </div>
         {hideDate !== true && (
@@ -24,7 +24,7 @@ export default function PostPage({
         )}
       </div>
 
-      <article className="prose dark:prose-dark transition-colors duration-500 lg:prose-xl">
+      <article className="prose sm:prose-lg dark:prose-dark transition-colors duration-500">
         {children}
       </article>
     </div>

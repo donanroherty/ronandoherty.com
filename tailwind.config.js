@@ -61,27 +61,13 @@ module.exports = {
 
 function typographyThemeCommon(theme) {
   return {
+    fontFamily: theme("fontFamily.heading"),
     body: {
       textRendering: "optimizeLegibility",
+      fontFamily: theme("fontFamily.body"),
     },
     p: {
       fontFamily: "Open Sans",
-    },
-    h1: {
-      fontFamily: theme("fontFamily.heading"),
-      fontSize: "1.3rem",
-    },
-    h2: {
-      fontFamily: theme("fontFamily.heading"),
-      fontSize: "1.1rem",
-    },
-    h3: {
-      fontFamily: theme("fontFamily.heading"),
-      fontSize: "1rem",
-    },
-    h4: {
-      fontFamily: theme("fontFamily.heading"),
-      fontSize: ".9rem",
     },
   }
 }
