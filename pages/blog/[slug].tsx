@@ -23,7 +23,7 @@ export default function Blog({ mdxSource, slug, frontmatter }: BlogPropTypes) {
 
 export async function getStaticPaths<GetStaticPaths>() {
   const files = getFiles("blog")
-  const params = files.map(file => ({
+  const params = files.map((file) => ({
     params: {
       slug: file.replace(/\.mdx$/, ""),
     },
