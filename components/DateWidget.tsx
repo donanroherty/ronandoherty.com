@@ -17,9 +17,9 @@ export default function DateWidget({ date, vertical }: DateWidgetProps) {
         className={`text-center text-xs text-subtitle dark:text-subtitleDark transition-colors duration-500 font-body font-extrabold`}
       >
         {day}
-        {vertical && <br />}
+        {vertical ? <br /> : <>&nbsp;</>}
         {month}
-        {vertical && <br />}
+        {vertical ? <br /> : <>&nbsp;</>}
         {year}
       </div>
     </div>
