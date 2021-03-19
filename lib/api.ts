@@ -4,6 +4,7 @@ import { join } from 'path'
 import matter from 'gray-matter'
 import { PostHeaderData } from '../types/post'
 import renderToString from 'next-mdx-remote/render-to-string'
+import mdxPrism from 'mdx-prism'
 
 type ContentType = "blog" | "pages"
 
@@ -22,7 +23,8 @@ export async function getFileBySlug(slug: string, dir: ContentType) {
     const mdxSource = await renderToString(content, {
         components: { name: React.Component },
         mdxOptions: {
-        }
+            rehypePlugins: [mdxPrism]
+        },
     })
 
     return {
