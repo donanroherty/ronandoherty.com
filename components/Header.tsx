@@ -13,30 +13,27 @@ function Header() {
         <div>
           <Link href="/">
             <a className="flex-auto -space-y-2">
-              <div className="select-none font-heading font-extrabold text-4xl xs:text-5xl text-heading dark:text-headingDark transition-colors duration-500">
+              <div className="text-4xl font-extrabold transition-colors duration-500 select-none font-heading xs:text-5xl text-heading dark:text-headingDark">
                 Ronan
               </div>
 
-              <div className="select-none font-heading font-extrabold text-4xl xs:text-5xl text-heading dark:text-headingDark transition-colors duration-500">
+              <div className="text-4xl font-extrabold transition-colors duration-500 select-none font-heading xs:text-5xl text-heading dark:text-headingDark">
                 Doherty
               </div>
             </a>
           </Link>
         </div>
         {/* Buttons */}
-        <div className="flex flex-col justify-between justify-items-end pt-1 h-full mt-auto">
+        <div className="flex flex-col justify-between h-full pt-1 mt-auto justify-items-end">
           {/* <div onClick={toggleTheme}>
             <Icon
               name="moon"
-              className="w-4 xs:w-5 mx-auto box-content pt-1 pl-2 pb-1 "
+              className="box-content w-4 pt-1 pb-1 pl-2 mx-auto xs:w-5 "
             />
           </div> */}
           <Link href="/about">
             <a>
-              <Icon
-                name="info"
-                className="w-5 xs:w-6 box-content pt-1 pl-1 pb-1"
-              />
+              <Icon name="info" className="box-content w-5 pt-1 pb-1 pl-1 xs:w-6" />
             </a>
           </Link>
         </div>
@@ -44,8 +41,8 @@ function Header() {
 
       {/* Developer */}
       <div>
-        <div className="font-heading font-semibold text-sm xs:text-lg text-subtitle dark:text-subtitleDark transition-colors duration-500">
-          Developer
+        <div className="text-sm font-semibold transition-colors duration-500 font-heading xs:text-lg text-subtitle dark:text-subtitleDark">
+          Software Dev
         </div>
       </div>
     </div>

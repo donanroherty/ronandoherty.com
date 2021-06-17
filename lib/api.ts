@@ -49,7 +49,9 @@ export function getAllPostFrontmatter(dir: ContentType) {
         return { slug, frontmatter }
     })
 
-    return files
+    const sorted = files.sort((a, b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime())
+
+    return sorted
 }
 
 export function getFilenameFromSlug(slug: string, dir: ContentType) {

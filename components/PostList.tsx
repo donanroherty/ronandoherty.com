@@ -8,13 +8,9 @@ type PostListProps = {
 
 function PostList({ postsData }: PostListProps) {
   return (
-    <ul className="space-y-10">
-      {postsData.map(data => (
-        <PostListItem
-          key={data.slug}
-          slug={data.slug}
-          post={data.frontmatter}
-        />
+    <ul className="space-y-14">
+      {postsData.map((data) => (
+        <PostListItem key={data.slug} slug={data.slug} post={data.frontmatter} />
       ))}
     </ul>
   )
