@@ -26,8 +26,8 @@ module.exports = {
         mono: ["DankMono"],
       },
       colors: {
-        heading: "#3B3B3B",
-        subtitle: "#545454",
+        heading: "#484848",
+        subtitle: "#646464",
         body: "#3C3C3C",
         error: colors.red[600],
 
