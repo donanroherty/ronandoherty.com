@@ -23,32 +23,23 @@ function ContactForm() {
 
   return (
     <div className="pb-10">
-      <div className="text-xl text-heading font-extrabold">Contact</div>
+      <div className="text-xl font-extrabold text-heading">Contact</div>
       <Formik
         initialValues={{ email: "", message: "" }}
         onSubmit={handleFormSubmit}
         validationSchema={contactSchema}
       >
-        {({
-          handleSubmit,
-          values,
-          isSubmitting,
-          handleChange,
-          handleBlur,
-          errors,
-        }) => (
+        {({ handleSubmit, values, isSubmitting, handleChange, handleBlur, errors }) => (
           <form
             onSubmit={handleSubmit}
-            className="grid space-y-2 text-body justify-items-stretch mt-3"
+            className="grid mt-3 space-y-2 text-body justify-items-stretch"
           >
             <div className="flex flex-col sm:flex-row">
-              <div className="sm:w-32 flex sm:flex-col flex-row align-top">
+              <div className="flex flex-row align-top sm:w-32 sm:flex-col">
                 <label className="font-semibold">Email</label>
-                <div className="my-auto pl-3 sm:my-0 sm:pl-0">
+                <div className="pl-3 my-auto sm:my-0 sm:pl-0">
                   {errors.email && (
-                    <div className="text-xs text-error sm:absolute">
-                      {errors.email}
-                    </div>
+                    <div className="text-xs text-error sm:absolute">{errors.email}</div>
                   )}
                 </div>
               </div>
@@ -59,19 +50,17 @@ function ContactForm() {
                   value={values.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  placeholder="you@exexample.com"
-                  className="bg-gray-200 border-gray-300 border from-gray-100 pl-3 pr-3 w-full h-9 rounded-tl-sm rounded-tr-3xl rounded-br-sm rounded-bl-sm focus:outline-none focus:border-gray-400"
+                  placeholder="you@example.com"
+                  className="w-full pl-3 pr-3 bg-gray-200 border border-gray-300 rounded-tl-sm rounded-bl-sm rounded-br-sm from-gray-100 h-9 rounded-tr-3xl focus:outline-none focus:border-gray-400"
                 />
               </div>
             </div>
 
             <div className="flex flex-col sm:flex-row">
-              <div className="sm:w-32 flex sm:flex-col flex-row align-top">
+              <div className="flex flex-row align-top sm:w-32 sm:flex-col">
                 <label className="font-semibold">Message</label>
-                <div className="my-auto pl-3 sm:my-0 sm:pl-0">
-                  {errors.message && (
-                    <div className="text-xs text-error">{errors.message}</div>
-                  )}
+                <div className="pl-3 my-auto sm:my-0 sm:pl-0">
+                  {errors.message && <div className="text-xs text-error">{errors.message}</div>}
                 </div>
               </div>
               <textarea
@@ -80,16 +69,16 @@ function ContactForm() {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 placeholder="Enter a message..."
-                className="bg-gray-200 border-gray-300 border from-gray-100 pl-3 pr-3 pt-2 pb-2 w-full rounded-tl-sm rounded-tr-sm rounded-br-sm rounded-bl-sm h-32 focus:outline-none focus:border-gray-400"
+                className="w-full h-32 pt-2 pb-2 pl-3 pr-3 bg-gray-200 border border-gray-300 rounded-tl-sm rounded-tr-sm rounded-bl-sm rounded-br-sm from-gray-100 focus:outline-none focus:border-gray-400"
               />
             </div>
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="bg-heading hover:bg-subtitle rounded-tl-sm rounded-tr-sm rounded-br-3xl rounded-bl-sm h-9 w-full sm:w-44 text-white justify-self-end"
+              className="w-full text-white rounded-tl-sm rounded-tr-sm rounded-bl-sm bg-heading hover:bg-subtitle rounded-br-3xl h-9 sm:w-44 justify-self-end"
             >
-              <div className="pl-5 float-left">Send</div>
+              <div className="float-left pl-5">Send</div>
             </button>
           </form>
         )}
