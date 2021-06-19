@@ -9,7 +9,7 @@ export default function Index({ postData }: HomeProps) {
   return (
     <div>
       <Head>
-        <title>RonanDoherty</title>
+        <title>Home - RonanDoherty.com</title>
       </Head>
 
       <PostList postsData={postData} />
