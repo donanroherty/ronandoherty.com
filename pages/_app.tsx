@@ -12,6 +12,13 @@ const isProd = process.env.NODE_ENV === "production"
 function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
 
+  // page view on mount
+  useEffect(() => {
+    const url = new URL(window.location.pathname, window.location.href)
+    if (isProd) gtag.pageView(url)
+  }, [])
+
+  // page view on route change
   useEffect(() => {
     const handleRouteChange = (url: URL) => {
       if (isProd) gtag.pageView(url)
