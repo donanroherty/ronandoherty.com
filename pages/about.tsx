@@ -2,29 +2,27 @@ import React from "react"
 import { getFileBySlug } from "../lib/api"
 import { GetStaticProps } from "next"
 import { Params } from "next/dist/next-server/server/router"
-import hydrate from "next-mdx-remote/hydrate"
-import { MdxRemote } from "next-mdx-remote/types"
+
+import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote"
+
 import PostPage from "../components/PostPage"
 import { PostHeaderData } from "../types/post"
 import MDXComponents from "../components/MDXComponents"
 import ContactForm from "../components/ContactForm"
 
 type AboutPropTypes = {
-  mdxSource: MdxRemote.Source
+  mdxSource: MDXRemoteSerializeResult
   slug: string
   frontmatter: PostHeaderData
 }
 
-export default function About({
-  mdxSource,
-  slug,
-  frontmatter,
-}: AboutPropTypes) {
-  const content = hydrate(mdxSource, { components: MDXComponents })
+export default function About({ mdxSource, slug, frontmatter }: AboutPropTypes) {
   return (
     <div className="space-y-6">
       <PostPage frontmatter={frontmatter} hideDate>
-        {content}
+        <MDXRemote {...mdxSource} components={MDXComponents} />
+
+        {/* {content} */}
       </PostPage>
       <ContactForm />
     </div>
