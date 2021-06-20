@@ -1,9 +1,8 @@
-import React from 'react'
+import { serialize } from 'next-mdx-remote/serialize'
 import fs from 'fs'
 import { join } from 'path'
 import matter from 'gray-matter'
 import { PostHeaderData } from '../types/post'
-import renderToString from 'next-mdx-remote/render-to-string'
 import mdxPrism from 'mdx-prism'
 
 type ContentType = "blog" | "pages"
@@ -20,8 +19,7 @@ export async function getFileBySlug(slug: string, dir: ContentType) {
     const file = fs.readFileSync(join(getPath(dir), `${slug}.mdx`), 'utf-8')
     const { data, content } = matter(file)
 
-    const mdxSource = await renderToString(content, {
-        components: { name: React.Component },
+    const mdxSource = await serialize(content, {
         mdxOptions: {
             rehypePlugins: [mdxPrism]
         },
