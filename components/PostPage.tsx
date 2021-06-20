@@ -22,7 +22,7 @@ export default function PostPage({ hideDate, frontmatter, children }: PostProps)
         {hideDate !== true && <DateWidget date={frontmatter.date} vertical={false} />}
       </div>
 
-      <article className="prose transition-colors duration-500 sm:prose-lg dark:prose-dark">
+      <article className="prose break-words transition-colors duration-500 sm:prose-lg dark:prose-dark">
         {children}
       </article>
     </div>
