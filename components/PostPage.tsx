@@ -19,6 +19,9 @@ export default function PostPage({ hideDate, frontmatter, children }: PostProps)
         <div className="text-4xl font-bold transition-colors duration-500 text-heading dark:text-headingDark">
           {frontmatter.title}
         </div>
+        <div className="text-base transition-colors duration-500 font-body xs:text-lg text-subtitle dark:text-subtitleDark">
+          {frontmatter.description}
+        </div>
         {hideDate !== true && <DateWidget date={frontmatter.date} vertical={false} />}
       </div>
 
