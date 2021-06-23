@@ -24,6 +24,7 @@ module.exports = {
         heading: ["Montserrat"],
         body: ["Open Sans", "system-ui"],
         mono: ["DankMono"],
+        subtitle: ["Charter"],
       },
       colors: {
         heading: "#484848",
@@ -67,7 +68,7 @@ function typographyThemeCommon(theme) {
       fontFamily: theme("fontFamily.body"),
     },
     p: {
-      fontFamily: "Open Sans",
+      fontFamily: "Charter",
     },
   }
 }
