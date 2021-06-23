@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { Formik } from "formik"
 import { ContactFormType } from "../types/forms"
 import * as Yup from "yup"
@@ -50,8 +51,9 @@ function ContactForm() {
                   value={values.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  disabled={isSubmitting}
                   placeholder="you@example.com"
-                  className="w-full pl-3 pr-3 bg-gray-200 border border-gray-300 rounded-tl-sm rounded-bl-sm rounded-br-sm from-gray-100 h-9 rounded-tr-3xl focus:outline-none focus:border-gray-400"
+                  className="w-full pl-3 pr-3 bg-gray-100 border border-gray-300 rounded-tl-sm rounded-bl-sm rounded-br-sm from-gray-100 h-9 rounded-tr-3xl focus:outline-none focus:border-gray-400"
                 />
               </div>
             </div>
@@ -68,17 +70,31 @@ function ContactForm() {
                 value={values.message}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                disabled={isSubmitting}
                 placeholder="Enter a message..."
-                className="w-full h-32 pt-2 pb-2 pl-3 pr-3 bg-gray-200 border border-gray-300 rounded-tl-sm rounded-tr-sm rounded-bl-sm rounded-br-sm from-gray-100 focus:outline-none focus:border-gray-400"
+                className="w-full h-32 pt-2 pb-2 pl-3 pr-3 bg-gray-100 border border-gray-300 rounded-tl-sm rounded-tr-sm rounded-bl-sm rounded-br-sm from-gray-100 focus:outline-none focus:border-gray-400"
               />
             </div>
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full text-white rounded-tl-sm rounded-tr-sm rounded-bl-sm bg-heading hover:bg-subtitle rounded-br-3xl h-9 sm:w-44 justify-self-end"
+              className={`
+                w-full text-white rounded-tl-sm rounded-tr-sm rounded-bl-sm 
+                ${isSubmitting ? "bg-gray-100" : "bg-heading"} 
+                ${isSubmitting ? "border border-gray-300" : "border-none"}
+                ${isSubmitting ? "hover:bg-gray-100" : "hover:bg-subtitle"}
+                rounded-br-3xl h-9 sm:w-44 justify-self-end
+              `}
             >
-              <div className="float-left pl-5">Send</div>
+              <div
+                className={`
+                  float-left pl-5
+                  ${isSubmitting ? "text-heading" : "text-gray-100"}
+                `}
+              >
+                {isSubmitting ? "Sending..." : "Send"}
+              </div>
             </button>
           </form>
         )}
