@@ -21,8 +21,9 @@ module.exports = {
       },
       backgroundColor: "bg-green-700",
       fontFamily: {
-        heading: ["Montserrat"],
-        body: ["Open Sans", "system-ui"],
+        title: ["Montserrat"],
+        heading: ["Open Sans", "system-ui"],
+        body: ["Charter", "Open Sans", "system-ui"],
         mono: ["DankMono"],
         subtitle: ["Charter"],
       },

@@ -1,9 +1,26 @@
-import { useState } from "react"
 import { Formik } from "formik"
 import { ContactFormType } from "../types/forms"
 import * as Yup from "yup"
+import Alert from "./Alert"
+import { useState } from "react"
+
+const SUCCESS_MESSAGE = {
+  title: "Success",
+  message: "Message sent.  Thanks for reaching out.",
+}
+const FAIL_MESSAGE = {
+  title: "Failure",
+  message: "Message could not be sent.",
+}
 
 function ContactForm() {
+  const [messageSuccess, setMessageSuccess] = useState(false)
+  const [alertVisible, setAlertVisible] = useState(false)
+  function showAlert() {
+    setAlertVisible(true)
+    setTimeout(() => setAlertVisible(false), 2000)
+  }
+
   async function handleFormSubmit(values: ContactFormType) {
     const body = {
       ...values,
@@ -12,9 +29,8 @@ function ContactForm() {
       method: "POST",
       body: JSON.stringify(body),
     })
-    const json = await res.json()
-
-    console.log(json)
+    setMessageSuccess(res.status === 200)
+    showAlert()
   }
 
   const contactSchema = Yup.object().shape({
@@ -22,9 +38,14 @@ function ContactForm() {
     message: Yup.string().min(10, "10 chars min").required("Required"),
   })
 
+  const alertMessage = messageSuccess ? SUCCESS_MESSAGE : FAIL_MESSAGE
+
   return (
     <div className="pb-10">
       <div className="text-xl font-extrabold text-heading">Contact</div>
+
+      {alertVisible && <Alert {...alertMessage} show />}
+
       <Formik
         initialValues={{ email: "", message: "" }}
         onSubmit={handleFormSubmit}
@@ -33,7 +54,7 @@ function ContactForm() {
         {({ handleSubmit, values, isSubmitting, handleChange, handleBlur, errors }) => (
           <form
             onSubmit={handleSubmit}
-            className="grid mt-3 space-y-2 text-body justify-items-stretch"
+            className="grid mt-3 space-y-2 text-body font-body justify-items-stretch"
           >
             <div className="flex flex-col sm:flex-row">
               <div className="flex flex-row align-top sm:w-32 sm:flex-col">
@@ -53,7 +74,7 @@ function ContactForm() {
                   onBlur={handleBlur}
                   disabled={isSubmitting}
                   placeholder="you@example.com"
-                  className="w-full pl-3 pr-3 bg-gray-100 border border-gray-300 rounded-tl-sm rounded-bl-sm rounded-br-sm from-gray-100 h-9 rounded-tr-3xl focus:outline-none focus:border-gray-400"
+                  className="w-full pl-3 pr-3 bg-gray-100 border border-gray-300 rounded-tl-sm rounded-bl-sm rounded-br-sm font-body from-gray-100 h-9 rounded-tr-3xl focus:outline-none focus:border-gray-400"
                 />
               </div>
             </div>
@@ -72,7 +93,7 @@ function ContactForm() {
                 onBlur={handleBlur}
                 disabled={isSubmitting}
                 placeholder="Enter a message..."
-                className="w-full h-32 pt-2 pb-2 pl-3 pr-3 bg-gray-100 border border-gray-300 rounded-tl-sm rounded-tr-sm rounded-bl-sm rounded-br-sm from-gray-100 focus:outline-none focus:border-gray-400"
+                className="w-full h-32 pt-2 pb-2 pl-3 pr-3 bg-gray-100 border border-gray-300 rounded-tl-sm rounded-tr-sm rounded-bl-sm rounded-br-sm font-body from-gray-100 focus:outline-none focus:border-gray-400"
               />
             </div>
 

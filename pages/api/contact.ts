@@ -28,10 +28,18 @@ async function contact(req: VercelRequest, res: VercelResponse) {
         }
       )
       console.log(info)
-      res.json(info)
+      res.statusCode = 200
+      res.json({
+        message: "SUCCESS",
+        code: 200
+      })
     } catch (err) {
       console.error('error: ', err)
-      res.json(err)
+      res.statusCode = err.responseCode
+      res.json({
+        message: "FAILURE",
+        code: err.responseCode
+      })
     }
 
   }
