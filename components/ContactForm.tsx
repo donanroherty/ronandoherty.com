@@ -1,4 +1,4 @@
-import { Formik } from "formik"
+import { Formik, FormikHelpers } from "formik"
 import { ContactFormType } from "../types/forms"
 import * as Yup from "yup"
 import Alert from "./Alert"
@@ -16,12 +16,16 @@ const FAIL_MESSAGE = {
 function ContactForm() {
   const [messageSuccess, setMessageSuccess] = useState(false)
   const [alertVisible, setAlertVisible] = useState(false)
-  function showAlert() {
+  function showAlert(success: boolean) {
+    setMessageSuccess(success)
     setAlertVisible(true)
-    setTimeout(() => setAlertVisible(false), 2000)
+    setTimeout(() => setAlertVisible(false), 3000)
   }
 
-  async function handleFormSubmit(values: ContactFormType) {
+  async function handleFormSubmit(
+    values: ContactFormType,
+    { resetForm }: FormikHelpers<ContactFormType>
+  ) {
     const body = {
       ...values,
     }
@@ -29,8 +33,11 @@ function ContactForm() {
       method: "POST",
       body: JSON.stringify(body),
     })
-    setMessageSuccess(res.status === 200)
-    showAlert()
+    const success = res.status == 200
+    if (success) {
+      resetForm()
+    }
+    showAlert(success)
   }
 
   const contactSchema = Yup.object().shape({
@@ -44,7 +51,7 @@ function ContactForm() {
     <div className="pb-10">
       <div className="text-xl font-extrabold text-heading">Contact</div>
 
-      {alertVisible && <Alert {...alertMessage} show />}
+      <Alert {...alertMessage} show={alertVisible} />
 
       <Formik
         initialValues={{ email: "", message: "" }}
@@ -105,6 +112,7 @@ function ContactForm() {
                 ${isSubmitting ? "bg-gray-100" : "bg-heading"} 
                 ${isSubmitting ? "border border-gray-300" : "border-none"}
                 ${isSubmitting ? "hover:bg-gray-100" : "hover:bg-subtitle"}
+                transition-colors duration-200
                 rounded-br-3xl h-9 sm:w-44 justify-self-end
               `}
             >
@@ -112,6 +120,7 @@ function ContactForm() {
                 className={`
                   float-left pl-5
                   ${isSubmitting ? "text-heading" : "text-gray-100"}
+                  transition-colors duration-200
                 `}
               >
                 {isSubmitting ? "Sending..." : "Send"}

@@ -1,5 +1,3 @@
-import { useState } from "react"
-
 type AlertProps = {
   title: string
   message: string
@@ -12,13 +10,14 @@ function Alert(props: AlertProps) {
   return (
     <div
       className={`
+        pointer-events-none
         fixed h-full w-full top-0 left-0 bg-gray-900 bg-opacity-40 
-        ${!show && "invisible"}
+        ${!show && "opacity-0"} transition-opacity duration-1000
       `}
     >
       {/* backdrop */}
 
-      <div className="fixed flex w-full h-full">
+      <div className={`fixed flex w-full h-full `}>
         {/* message box */}
         <div
           className={`
