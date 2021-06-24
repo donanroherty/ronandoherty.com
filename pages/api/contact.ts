@@ -9,9 +9,9 @@ async function contact(req: VercelRequest, res: VercelResponse) {
   if (email !== undefined && message !== undefined) {
 
     let transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
+      host: "smtp.fastmail.com",
       port: 465,
-      service: 'Gmail',
+      service: "FastMail",
       auth: {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASSWORD
@@ -21,21 +21,29 @@ async function contact(req: VercelRequest, res: VercelResponse) {
     try {
       const info = await transporter.sendMail(
         {
-          from: 'ronandohertydev@gmail.com',
-          to: 'ronandohertydev@gmail.com',
+          from: `${email}`,
+          to: 'info@ronandoherty.com',
           subject: `Blog Contact (${email})`,
           text: message
         }
       )
       console.log(info)
+      res.statusCode = 200
+      res.json({
+        message: "SUCCESS",
+        code: 200
+      })
     } catch (err) {
       console.error('error: ', err)
+      res.statusCode = err.responseCode
+      res.json({
+        message: "FAILURE",
+        code: err.responseCode
+      })
     }
 
-    res.json({ error: null, message: 'message sent successfully' })
   }
   else {
-    res.statusCode = 422
     res.statusMessage = 'MISSING_REQUIRED_DATA'
     res.json({ error: 'MISSING_REQUIRED_DATA', message: 'Email address or message were not received' })
   }
