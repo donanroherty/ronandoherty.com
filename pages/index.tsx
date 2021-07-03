@@ -20,7 +20,9 @@ export default function Index({ postData }: HomeProps) {
 }
 
 export async function getStaticProps<GetStaticProps>() {
-  const postData = getAllPostFrontmatter("blog")
+  const postData = getAllPostFrontmatter("blog").filter(
+    (post) => post.frontmatter.published && post.frontmatter.listed
+  )
 
   return {
     props: {
