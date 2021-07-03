@@ -9,6 +9,8 @@ import PostPage from "../components/PostPage"
 import { PostHeaderData } from "../types/post"
 import MDXComponents from "../components/MDXComponents"
 import ContactForm from "../components/ContactForm"
+import Icon from "../components/Icon"
+import icons from "../components/Icon"
 
 type AboutPropTypes = {
   mdxSource: MDXRemoteSerializeResult
@@ -24,6 +26,30 @@ export default function About({ mdxSource, slug, frontmatter }: AboutPropTypes) 
 
         {/* {content} */}
       </PostPage>
+
+      {/* Social links */}
+      <div className="flex flex-row flex-wrap justify-between w-full gap-3">
+        <a
+          href="https://www.github.com/donanroherty"
+          target="_blank"
+          rel="noreferrer noopener"
+          className="flex flex-row gap-2"
+        >
+          <Icon name="github" className="w-5 xs:w-6" />
+          <div className="">github.com/donanroherty</div>
+        </a>
+
+        <a
+          href="https://www.linkedin.com/in/ronan-doherty-dev"
+          target="_blank"
+          rel="noreferrer noopener"
+          className="flex flex-row gap-2"
+        >
+          <Icon name="linkedin" className="w-5 xs:w-6" />
+          <div className="">linkedin.com/in/ronan-doherty-dev</div>
+        </a>
+      </div>
+
       <ContactForm />
     </div>
   )
