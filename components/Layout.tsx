@@ -8,7 +8,7 @@ type LayoutProps = {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="container h-full max-w-screen-md mx-auto space-y-16 grid-rows-layout">
+    <div className="container h-full max-w-screen-md mx-auto space-y-8 sm:space-y-16 grid-rows-layout">
       <Header />
       <div>{children}</div>
       <Footer />
