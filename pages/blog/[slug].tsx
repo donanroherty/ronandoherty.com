@@ -1,5 +1,5 @@
 import React from "react"
-import { getFileBySlug, getFiles } from "../../lib/api"
+import { getAllPostFrontmatter, getFileBySlug, getFiles } from "../../lib/api"
 import { GetStaticPathsResult, GetStaticProps } from "next"
 import { Params } from "next/dist/next-server/server/router"
 import PostPage from "../../components/PostPage"
@@ -23,10 +23,11 @@ export default function Blog({ mdxSource, slug, frontmatter }: BlogPropTypes) {
 }
 
 export async function getStaticPaths<GetStaticPaths>() {
-  const files = getFiles("blog")
-  const params = files.map((file) => ({
+  const postData = getAllPostFrontmatter("blog").filter((post) => post.frontmatter.published)
+
+  const params = postData.map((frontmatter) => ({
     params: {
-      slug: file.replace(/\.mdx$/, ""),
+      slug: frontmatter.slug,
     },
   }))
 
