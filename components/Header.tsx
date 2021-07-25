@@ -13,11 +13,11 @@ function Header() {
         <div>
           <Link href="/">
             <a className="flex-auto -space-y-2">
-              <div className="text-4xl font-extrabold transition-colors duration-500 select-none font-title xs:text-5xl text-heading dark:text-headingDark">
+              <div className="text-4xl font-extrabold transition-colors duration-500 select-none font-title xs:text-5xl text-title dark:text-titleDark">
                 Ronan
               </div>
 
-              <div className="text-4xl font-extrabold transition-colors duration-500 select-none font-title xs:text-5xl text-heading dark:text-headingDark">
+              <div className="text-4xl font-extrabold transition-colors duration-500 select-none font-title xs:text-5xl text-title dark:text-titleDark">
                 Doherty
               </div>
             </a>

@@ -22,17 +22,19 @@ module.exports = {
       backgroundColor: "bg-green-700",
       fontFamily: {
         title: ["Montserrat"],
-        heading: ["Open Sans", "system-ui"],
-        body: ["Charter", "Open Sans", "system-ui"],
+        heading: ["Open Sans"],
+        body: ["Charter"],
         mono: ["DankMono"],
         subtitle: ["Charter"],
       },
       colors: {
-        heading: "#484848",
+        title: "#484848",
+        heading: "#505050",
         subtitle: "#646464",
         body: "#3C3C3C",
         error: colors.red[600],
 
+        titleDark: colors.gray[300],
         headingDark: colors.gray[300],
         subtitleDark: colors.gray[500],
         bodyDark: colors.gray[400],
@@ -40,14 +42,22 @@ module.exports = {
       typography: (theme) => ({
         DEFAULT: {
           css: {
-            ...typographyThemeLight(theme),
             ...typographyThemeCommon(theme),
+            p: { color: theme("colors.body"), fontFamily: theme("fontFamily.body") },
+            h1: { color: theme("colors.heading"), fontFamily: theme("fontFamily.heading") },
+            h2: { color: theme("colors.heading"), fontFamily: theme("fontFamily.heading") },
+            h3: { color: theme("colors.heading"), fontFamily: theme("fontFamily.heading") },
+            h4: { color: theme("colors.heading"), fontFamily: theme("fontFamily.heading") },
           },
         },
         dark: {
           css: {
-            ...typographyThemeDark(theme),
             ...typographyThemeCommon(theme),
+            p: { color: theme("colors.bodyDark"), fontFamily: theme("fontFamily.body") },
+            h1: { color: theme("colors.headingDark"), fontFamily: theme("fontFamily.heading") },
+            h2: { color: theme("colors.headingDark"), fontFamily: theme("fontFamily.heading") },
+            h3: { color: theme("colors.headingDark"), fontFamily: theme("fontFamily.heading") },
+            h4: { color: theme("colors.headingDark"), fontFamily: theme("fontFamily.heading") },
           },
         },
       }),
@@ -67,29 +77,7 @@ function typographyThemeCommon(theme) {
     body: {
       textRendering: "optimizeLegibility",
       fontFamily: theme("fontFamily.body"),
+      fontWeight: "normal",
     },
-    p: {
-      fontFamily: "Charter",
-    },
-  }
-}
-
-function typographyThemeLight(theme) {
-  return {
-    p: { color: theme("colors.body") },
-    h1: { color: theme("colors.heading") },
-    h2: { color: theme("colors.heading") },
-    h3: { color: theme("colors.heading") },
-    h4: { color: theme("colors.heading") },
-  }
-}
-
-function typographyThemeDark(theme) {
-  return {
-    p: { color: theme("colors.bodyDark") },
-    h1: { color: theme("colors.headingDark") },
-    h2: { color: theme("colors.headingDark") },
-    h3: { color: theme("colors.headingDark") },
-    h4: { color: theme("colors.headingDark") },
   }
 }
