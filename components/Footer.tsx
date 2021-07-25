@@ -1,6 +1,6 @@
 function Footer() {
   return (
-    <footer className="text-xs font-body font-semibold text-body h-10  align-text-top flex">
+    <footer className="flex h-10 font-sans text-xs font-semibold align-text-top text-body">
       <span className="my-auto">&#169; Ronan Doherty 2021</span>
     </footer>
   )

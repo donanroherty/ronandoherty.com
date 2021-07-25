@@ -30,8 +30,8 @@ function Alert(props: AlertProps) {
           `}
         >
           <div className="inline-block">
-            <div className={`font-heading text-heading text-xl font-bold`}>{title}</div>
-            <div className={`font-body text-xl text-body`}>{message}</div>
+            <div className={`font-sans text-heading text-xl font-bold`}>{title}</div>
+            <div className={`font-serif text-xl text-body`}>{message}</div>
           </div>
         </div>
       </div>

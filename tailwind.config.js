@@ -22,10 +22,9 @@ module.exports = {
       backgroundColor: "bg-green-700",
       fontFamily: {
         title: ["Montserrat"],
-        heading: ["Open Sans"],
-        body: ["Charter"],
+        sans: ["Open Sans"],
+        serif: ["Charter"],
         mono: ["DankMono"],
-        subtitle: ["Charter"],
       },
       colors: {
         title: "#484848",
@@ -44,20 +43,20 @@ module.exports = {
           css: {
             ...typographyThemeCommon(theme),
             p: { color: theme("colors.body"), fontFamily: theme("fontFamily.body") },
-            h1: { color: theme("colors.heading"), fontFamily: theme("fontFamily.heading") },
-            h2: { color: theme("colors.heading"), fontFamily: theme("fontFamily.heading") },
-            h3: { color: theme("colors.heading"), fontFamily: theme("fontFamily.heading") },
-            h4: { color: theme("colors.heading"), fontFamily: theme("fontFamily.heading") },
+            h1: { color: theme("colors.heading"), fontFamily: theme("fontFamily.sans") },
+            h2: { color: theme("colors.heading"), fontFamily: theme("fontFamily.sans") },
+            h3: { color: theme("colors.heading"), fontFamily: theme("fontFamily.sans") },
+            h4: { color: theme("colors.heading"), fontFamily: theme("fontFamily.sans") },
           },
         },
         dark: {
           css: {
             ...typographyThemeCommon(theme),
             p: { color: theme("colors.bodyDark"), fontFamily: theme("fontFamily.body") },
-            h1: { color: theme("colors.headingDark"), fontFamily: theme("fontFamily.heading") },
-            h2: { color: theme("colors.headingDark"), fontFamily: theme("fontFamily.heading") },
-            h3: { color: theme("colors.headingDark"), fontFamily: theme("fontFamily.heading") },
-            h4: { color: theme("colors.headingDark"), fontFamily: theme("fontFamily.heading") },
+            h1: { color: theme("colors.headingDark"), fontFamily: theme("fontFamily.sans") },
+            h2: { color: theme("colors.headingDark"), fontFamily: theme("fontFamily.sans") },
+            h3: { color: theme("colors.headingDark"), fontFamily: theme("fontFamily.sans") },
+            h4: { color: theme("colors.headingDark"), fontFamily: theme("fontFamily.sans") },
           },
         },
       }),
@@ -73,7 +72,7 @@ module.exports = {
 
 function typographyThemeCommon(theme) {
   return {
-    fontFamily: theme("fontFamily.heading"),
+    fontFamily: theme("fontFamily.sans"),
     body: {
       textRendering: "optimizeLegibility",
       fontFamily: theme("fontFamily.body"),

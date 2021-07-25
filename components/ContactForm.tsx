@@ -61,7 +61,7 @@ function ContactForm() {
         {({ handleSubmit, values, isSubmitting, handleChange, handleBlur, errors }) => (
           <form
             onSubmit={handleSubmit}
-            className="grid mt-3 space-y-2 text-body font-body justify-items-stretch"
+            className="grid mt-3 space-y-2 font-serif text-body justify-items-stretch"
           >
             <div className="flex flex-col sm:flex-row">
               <div className="flex flex-row align-top sm:w-32 sm:flex-col">
@@ -81,7 +81,7 @@ function ContactForm() {
                   onBlur={handleBlur}
                   disabled={isSubmitting}
                   placeholder="you@example.com"
-                  className="w-full pl-3 pr-3 bg-gray-100 border border-gray-300 rounded-tl-sm rounded-bl-sm rounded-br-sm font-body from-gray-100 h-9 rounded-tr-3xl focus:outline-none focus:border-gray-400"
+                  className="w-full pl-3 pr-3 font-serif bg-gray-100 border border-gray-300 rounded-tl-sm rounded-bl-sm rounded-br-sm from-gray-100 h-9 rounded-tr-3xl focus:outline-none focus:border-gray-400"
                 />
               </div>
             </div>
@@ -100,7 +100,7 @@ function ContactForm() {
                 onBlur={handleBlur}
                 disabled={isSubmitting}
                 placeholder="Enter a message..."
-                className="w-full h-32 pt-2 pb-2 pl-3 pr-3 bg-gray-100 border border-gray-300 rounded-tl-sm rounded-tr-sm rounded-bl-sm rounded-br-sm font-body from-gray-100 focus:outline-none focus:border-gray-400"
+                className="w-full h-32 pt-2 pb-2 pl-3 pr-3 font-serif bg-gray-100 border border-gray-300 rounded-tl-sm rounded-tr-sm rounded-bl-sm rounded-br-sm from-gray-100 focus:outline-none focus:border-gray-400"
               />
             </div>
 

@@ -9,7 +9,7 @@ type PostListProps = {
 function PostList({ postsData }: PostListProps) {
   return (
     <div>
-      <div className="w-full mb-6 text-xl font-extrabold transition-colors duration-500 xs:text-2xl text-heading dark:text-headingDark font-heading">
+      <div className="w-full mb-6 font-sans text-xl font-extrabold transition-colors duration-500 xs:text-2xl text-heading dark:text-headingDark">
         Projects
       </div>
       <ul className="space-y-14">
