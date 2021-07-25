@@ -42,7 +42,7 @@ function Header() {
       {/* Developer */}
       <div>
         <div className="font-sans text-sm font-semibold transition-colors duration-500 xs:text-lg text-subtitle dark:text-subtitleDark">
-          Software Dev
+          Developer
         </div>
       </div>
     </div>
