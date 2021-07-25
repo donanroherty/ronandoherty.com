@@ -25,7 +25,7 @@ function PostListItem({ post, slug }: PostListItemProps) {
             </a>
           </Link>
 
-          <div className="font-serif text-base transition-colors duration-500 xs:text-lg text-subtitle dark:text-subtitleDark">
+          <div className="font-sans text-base transition-colors duration-500 xs:text-lg text-subtitle dark:text-subtitleDark">
             {post.description}
           </div>
         </div>

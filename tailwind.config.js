@@ -42,21 +42,21 @@ module.exports = {
         DEFAULT: {
           css: {
             ...typographyThemeCommon(theme),
-            p: { color: theme("colors.body"), fontFamily: theme("fontFamily.body") },
-            h1: { color: theme("colors.heading"), fontFamily: theme("fontFamily.sans") },
-            h2: { color: theme("colors.heading"), fontFamily: theme("fontFamily.sans") },
-            h3: { color: theme("colors.heading"), fontFamily: theme("fontFamily.sans") },
-            h4: { color: theme("colors.heading"), fontFamily: theme("fontFamily.sans") },
+            p: { color: theme("colors.body"), fontFamily: theme("fontFamily.serif") },
+            h1: h(theme),
+            h2: h(theme),
+            h3: h(theme),
+            h4: h(theme),
           },
         },
         dark: {
           css: {
             ...typographyThemeCommon(theme),
-            p: { color: theme("colors.bodyDark"), fontFamily: theme("fontFamily.body") },
-            h1: { color: theme("colors.headingDark"), fontFamily: theme("fontFamily.sans") },
-            h2: { color: theme("colors.headingDark"), fontFamily: theme("fontFamily.sans") },
-            h3: { color: theme("colors.headingDark"), fontFamily: theme("fontFamily.sans") },
-            h4: { color: theme("colors.headingDark"), fontFamily: theme("fontFamily.sans") },
+            p: { color: theme("colors.bodyDark"), fontFamily: theme("fontFamily.serif") },
+            h1: hDark(theme),
+            h2: hDark(theme),
+            h3: hDark(theme),
+            h4: hDark(theme),
           },
         },
       }),
@@ -70,13 +70,22 @@ module.exports = {
   plugins: [require("@tailwindcss/typography")],
 }
 
-function typographyThemeCommon(theme) {
-  return {
-    fontFamily: theme("fontFamily.sans"),
-    body: {
-      textRendering: "optimizeLegibility",
-      fontFamily: theme("fontFamily.body"),
-      fontWeight: "normal",
-    },
-  }
-}
+const h = (theme) => ({
+  fontWeight: "600",
+  fontFamily: theme("fontFamily.sans"),
+  color: theme("colors.heading"),
+})
+
+const hDark = (theme) => ({
+  fontWeight: "600",
+  fontFamily: theme("fontFamily.sans"),
+  color: theme("colors.headingDark"),
+})
+
+const typographyThemeCommon = (theme) => ({
+  fontFamily: theme("fontFamily.serif"),
+  body: {
+    textRendering: "optimizeLegibility",
+    fontWeight: "normal",
+  },
+})
