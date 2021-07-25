@@ -7,7 +7,7 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <link rel="icon" href="assets/RD-circle.svg" />
+          <link rel="shortcut icon" href="/assets/RD-circle.svg" />
 
           {/* Global site tag (gtag.js) - Google Analytics */}
           <script
