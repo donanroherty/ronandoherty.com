@@ -47,8 +47,13 @@ module.exports = {
             h2: h(theme),
             h3: h(theme),
             h4: h(theme),
+            ...codeBlockStyle,
           },
         },
+        sm: { css: { ...codeBlockStyle } },
+        lg: { css: { ...codeBlockStyle } },
+        xl: { css: { ...codeBlockStyle } },
+        "2xl": { css: { ...codeBlockStyle } },
         dark: {
           css: {
             ...typographyThemeCommon(theme),
@@ -70,6 +75,14 @@ module.exports = {
   plugins: [require("@tailwindcss/typography")],
 }
 
+const codeBlockStyle = {
+  pre: {
+    borderTopLeftRadius: "0.125em",
+    borderTopRightRadius: "1.5em",
+    borderBottomRightRadius: "1.5em",
+    borderBottomLeftRadius: "0.125em",
+  },
+}
 const h = (theme) => ({
   fontWeight: "600",
   fontFamily: theme("fontFamily.sans"),
