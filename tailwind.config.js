@@ -22,17 +22,18 @@ module.exports = {
       backgroundColor: "bg-green-700",
       fontFamily: {
         title: ["Montserrat"],
-        heading: ["Open Sans", "system-ui"],
-        body: ["Charter", "Open Sans", "system-ui"],
+        sans: ["Open Sans"],
+        serif: ["Charter"],
         mono: ["DankMono"],
-        subtitle: ["Charter"],
       },
       colors: {
-        heading: "#484848",
+        title: "#484848",
+        heading: "#505050",
         subtitle: "#646464",
         body: "#3C3C3C",
         error: colors.red[600],
 
+        titleDark: colors.gray[300],
         headingDark: colors.gray[300],
         subtitleDark: colors.gray[500],
         bodyDark: colors.gray[400],
@@ -40,14 +41,27 @@ module.exports = {
       typography: (theme) => ({
         DEFAULT: {
           css: {
-            ...typographyThemeLight(theme),
             ...typographyThemeCommon(theme),
+            p: { color: theme("colors.body"), fontFamily: theme("fontFamily.serif") },
+            h1: h(theme),
+            h2: h(theme),
+            h3: h(theme),
+            h4: h(theme),
+            ...codeBlockStyle,
           },
         },
+        sm: { css: { ...codeBlockStyle } },
+        lg: { css: { ...codeBlockStyle } },
+        xl: { css: { ...codeBlockStyle } },
+        "2xl": { css: { ...codeBlockStyle } },
         dark: {
           css: {
-            ...typographyThemeDark(theme),
             ...typographyThemeCommon(theme),
+            p: { color: theme("colors.bodyDark"), fontFamily: theme("fontFamily.serif") },
+            h1: hDark(theme),
+            h2: hDark(theme),
+            h3: hDark(theme),
+            h4: hDark(theme),
           },
         },
       }),
@@ -61,35 +75,40 @@ module.exports = {
   plugins: [require("@tailwindcss/typography")],
 }
 
-function typographyThemeCommon(theme) {
-  return {
-    fontFamily: theme("fontFamily.heading"),
-    body: {
-      textRendering: "optimizeLegibility",
-      fontFamily: theme("fontFamily.body"),
-    },
-    p: {
-      fontFamily: "Charter",
-    },
-  }
+const codeBlockStyle = {
+  pre: {
+    borderTopLeftRadius: "0.125em",
+    borderTopRightRadius: "1.5em",
+    borderBottomRightRadius: "1.5em",
+    borderBottomLeftRadius: "0.125em",
+  },
+  code: {
+    background: "#f5f7ff",
+    backgroundColor: "rgb(245, 247, 255)",
+  },
+  "code::before": {
+    content: "none",
+  },
+  "code::after": {
+    content: "none",
+  },
 }
+const h = (theme) => ({
+  fontWeight: "600",
+  fontFamily: theme("fontFamily.sans"),
+  color: theme("colors.heading"),
+})
 
-function typographyThemeLight(theme) {
-  return {
-    p: { color: theme("colors.body") },
-    h1: { color: theme("colors.heading") },
-    h2: { color: theme("colors.heading") },
-    h3: { color: theme("colors.heading") },
-    h4: { color: theme("colors.heading") },
-  }
-}
+const hDark = (theme) => ({
+  fontWeight: "600",
+  fontFamily: theme("fontFamily.sans"),
+  color: theme("colors.headingDark"),
+})
 
-function typographyThemeDark(theme) {
-  return {
-    p: { color: theme("colors.bodyDark") },
-    h1: { color: theme("colors.headingDark") },
-    h2: { color: theme("colors.headingDark") },
-    h3: { color: theme("colors.headingDark") },
-    h4: { color: theme("colors.headingDark") },
-  }
-}
+const typographyThemeCommon = (theme) => ({
+  fontFamily: theme("fontFamily.serif"),
+  body: {
+    textRendering: "optimizeLegibility",
+    fontWeight: "normal",
+  },
+})

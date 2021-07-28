@@ -16,10 +16,10 @@ export default function PostPage({ hideDate, frontmatter, children }: PostProps)
         <title>{frontmatter.title} - RonanDoherty.com</title>
       </Head>
       <div className="space-y-1">
-        <div className="text-4xl font-bold transition-colors duration-500 text-heading dark:text-headingDark">
+        <div className="text-3xl font-bold transition-colors duration-500 text-heading dark:text-headingDark">
           {frontmatter.title}
         </div>
-        <div className="text-base transition-colors duration-500 font-body xs:text-lg text-subtitle dark:text-subtitleDark">
+        <div className="font-sans text-base transition-colors duration-500 xs:text-lg text-subtitle dark:text-subtitleDark">
           {frontmatter.description}
         </div>
         {hideDate !== true && <DateWidget date={frontmatter.date} vertical={false} />}

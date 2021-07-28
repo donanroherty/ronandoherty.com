@@ -11,10 +11,12 @@ export default function DateWidget({ date, vertical }: DateWidgetProps) {
 
   const flexParams = vertical ? "flex-col" : "lex-row space-x-1"
 
+  const fontSize = vertical ? "text-xs" : "text-s"
+
   return (
     <div className={`flex ${flexParams}`}>
       <div
-        className={`text-center text-xs text-subtitle dark:text-subtitleDark transition-colors duration-500 font-body font-extrabold`}
+        className={`${fontSize} text-center text-subtitle dark:text-subtitleDark transition-colors duration-500 font-sans font-extrabold`}
       >
         {day}
         {vertical ? <br /> : <>&nbsp;</>}
