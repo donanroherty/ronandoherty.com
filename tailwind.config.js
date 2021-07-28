@@ -85,6 +85,11 @@ const codeBlockStyle = {
   code: {
     background: "#f5f7ff",
     backgroundColor: "rgb(245, 247, 255)",
+    padding: ".2em",
+    borderTopLeftRadius: "0.125em",
+    borderTopRightRadius: "0.5em",
+    borderBottomRightRadius: "0.5em",
+    borderBottomLeftRadius: "0.125em",
   },
   "code::before": {
     content: "none",
