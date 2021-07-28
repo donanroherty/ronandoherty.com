@@ -82,6 +82,16 @@ const codeBlockStyle = {
     borderBottomRightRadius: "1.5em",
     borderBottomLeftRadius: "0.125em",
   },
+  code: {
+    background: "#f5f7ff",
+    backgroundColor: "rgb(245, 247, 255)",
+  },
+  "code::before": {
+    content: "none",
+  },
+  "code::after": {
+    content: "none",
+  },
 }
 const h = (theme) => ({
   fontWeight: "600",
