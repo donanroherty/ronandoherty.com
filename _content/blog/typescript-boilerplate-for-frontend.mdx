@@ -7,7 +7,10 @@ listed: true
 ---
 
 This guide will cover how to set up a basic frontend project with Typescript. It expects you have Yarn package manager installed or you know how to translate basic commands to npm.  
-I am working on a game engine guide and decided that a primer might be in order. This is by no means exaustive but may be helpful for people new to Typescript and want to see their code do stuff in the browser fast.
+I am working on a game engine guide and decided that a primer might be in order. This is by no means exaustive but may be helpful for people who are new to Typescript and want to see their code do stuff in the browser fast.
+
+The final source code can be found here:  
+https://github.com/donanroherty/tutorial-typescript-boilerplate-for-frontend
 
 ## Overview
 
@@ -53,7 +56,7 @@ Our directory structure should now look like this:
 ### Configuration
 
 Typescript configuration can look scary at first but we only need to make a few changes.  
-In `tsconfig.json`, set the following properties.
+In `tsconfig.json`, set the following properties:
 
 ```json
 // tsconfig.json
@@ -69,10 +72,10 @@ In `tsconfig.json`, set the following properties.
 }
 ```
 
-`target` tells Typescript we want to output ES6 JavaScript. ES6 is the highest JavaScript specification supported in modern browsers.  
-`module` specifies that we want to use ES6 flavored modules.  
-`rootDir` tells Typescript where to find our source `.ts` files.  
-`outDir` is the target folder for our compiled JavaScript.
+- `target` tells Typescript we want to output ES6 JavaScript. ES6 is the highest JavaScript specification supported in modern browsers.
+- `module` specifies that we want to use ES6 flavored modules.
+- `rootDir` tells Typescript where to find our source `.ts` files.
+- `outDir` is the target folder for our compiled JavaScript.
 
 ### Our first Typescript file
 
@@ -201,12 +204,11 @@ Open `tsconfig.json` and set the following two options. `inlineSourceMap` adds a
 }
 ```
 
-Next we need to tell VSCode to launch a new instance of Chrome and conenct to it.  
-In VSCode, press `F1`.  
-Select `Debug: Select and Start Debugging`;  
-select `Add Configuration...`;  
-finally select `Chrome`.  
-VSCode will generate a `launch.json` file. In the configurations properties, ensure `url` points at port `8000`, this is the port our dev-server uses.
+Next we'll generate a `launch.json` file to tell VSCode to how launch a new instance of Chrome and attach to it.
+
+- In VSCode, press `F1`.
+- Select `Debug: Select and Start Debugging` -> `Add Configuration...` -> `Chrome`
+- Open `.vscode/launch.json`. Set `"url"` to `"http://localhost:8000"`
 
 ```json
 // .vscode/launch.json
@@ -237,5 +239,5 @@ A new Chrome instance will popup and load our project. As soon as the line with 
 
 ## Conclusion
 
-That’s it! We created a Typescript application to use as a boilerplate for any frontend application. I will be this as a launching point for an upcoming game engine tutorial so stay tuned.
+That’s it! We created a Typescript application to use as a boilerplate for any frontend application. I will using be this as a launching point for an upcoming game engine tutorial so stay tuned.
 This is my first blog post. I hope this was useful to someone.
