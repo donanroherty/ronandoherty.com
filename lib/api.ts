@@ -45,6 +45,7 @@ export function getAllPostFrontmatter(dir: ContentType) {
         description: data.description,
         published: data.published,
         listed: data.listed,
+        thumbnail: data.thumbnail,
       }
       return { slug, frontmatter }
     }
