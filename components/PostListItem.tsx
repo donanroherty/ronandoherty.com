@@ -6,15 +6,19 @@ import DateWidget from "./DateWidget"
 type PostListItemProps = {
   slug: string
   post: PostHeaderData
+  showThumbnail?: boolean
+  showDate?: boolean
 }
 
-function PostListItem({ post, slug }: PostListItemProps) {
+function PostListItem({ post, slug, showThumbnail = false, showDate = false }: PostListItemProps) {
   return (
-    <li className="w-full">
+    <div className="w-full">
       <div className="flex flex-row space-x-4">
-        <div className="my-auto">
-          <DateWidget date={post.date} vertical />
-        </div>
+        {showDate && (
+          <div className="my-auto">
+            <DateWidget date={post.date} vertical />
+          </div>
+        )}
 
         <div>
           <Link href={slug}>
@@ -30,7 +34,7 @@ function PostListItem({ post, slug }: PostListItemProps) {
           </div>
         </div>
       </div>
-    </li>
+    </div>
   )
 }
 
