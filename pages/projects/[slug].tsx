@@ -23,7 +23,7 @@ export default function Blog({ mdxSource, slug, frontmatter }: BlogPropTypes) {
 }
 
 export async function getStaticPaths<GetStaticPaths>() {
-  const postData = getAllPostFrontmatter("blog").filter((post) => post.frontmatter.published)
+  const postData = getAllPostFrontmatter("projects").filter((post) => post.frontmatter.published)
   const params = postData.map((frontmatter) => ({
     params: {
       slug: frontmatter.slug,
@@ -37,6 +37,6 @@ export async function getStaticPaths<GetStaticPaths>() {
 }
 
 export async function getStaticProps<GetStaticProps>({ params }: Params) {
-  const post = await getFileBySlug(params.slug, "blog")
+  const post = await getFileBySlug(params.slug, "projects")
   return { props: post }
 }
