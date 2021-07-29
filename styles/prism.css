@@ -29,7 +29,7 @@ pre[class*="language-"] {
   -moz-hyphens: none;
   -ms-hyphens: none;
   hyphens: none;
-  background: #f5f7ff;
+  background: transparent;
   color: #5e6687;
 }
 
