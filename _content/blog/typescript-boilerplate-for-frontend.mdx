@@ -9,7 +9,7 @@ listed: true
 This guide will cover how to set up a basic frontend project with Typescript. It expects you have Yarn package manager installed or you know how to translate basic commands to npm.  
 I am working on a game engine guide and decided that a primer might be in order. This is by no means exaustive but may be helpful for people who are new to Typescript and want to see their code do stuff in the browser fast.
 
-The final source code can be found here:  
+Completed source:  
 https://github.com/donanroherty/tutorial-typescript-boilerplate-for-frontend
 
 ## Overview
@@ -23,7 +23,7 @@ This article will cover:
 
 ## Initializing a Typescript project
 
-Open a terminal and navigate to your project’s folder of choice. Run the following commands to create our project’s folder structure and open it in Visual Studio Code.
+Open a terminal and navigate to your project’s folder of choice. Execute the following commands to create our project’s folder structure and open it in Visual Studio Code.
 
 ```bash
 mkdir typescript-app
@@ -56,7 +56,7 @@ Our directory structure should now look like this:
 ### Configuration
 
 Typescript configuration can look scary at first but we only need to make a few changes.  
-In `tsconfig.json`, set the following properties:
+In `tsconfig.json`, Set the following properties to tell TS to target ES6 JavaScript and set the source root and output directories.
 
 ```json
 // tsconfig.json
@@ -71,11 +71,6 @@ In `tsconfig.json`, set the following properties:
   }
 }
 ```
-
-- `target` tells Typescript we want to output ES6 JavaScript. ES6 is the highest JavaScript specification supported in modern browsers.
-- `module` specifies that we want to use ES6 flavored modules.
-- `rootDir` tells Typescript where to find our source `.ts` files.
-- `outDir` is the target folder for our compiled JavaScript.
 
 ### Our first Typescript file
 
@@ -96,11 +91,17 @@ Open `package.json` and add a scripts object property, containing a key named `t
 ```json
 // package.json
 "scripts": {
-  ts: "tsc -w"
+  "ts": "tsc -w"
  },
 ```
 
-Running `yarn dev` in the terminal will now build our Typescript project. You will find the resulting JavaScript in `./public/js/app.js`. This is pure JavaScript and ready to run in the browser.
+In a terminal, run our new script:
+
+```bash
+yarn ts
+```
+
+Typescript will now build our `.ts` files into `.js` files which the browser can execute. You will find the resulting JavaScript in `./public/js/app.js`.
 
 ## Running code in the browser
 
@@ -108,8 +109,7 @@ We now have Typescript building and outputting JavaScript. The next step is to g
 
 ### Creating the HTML content
 
-Create a file named `index.html` inside the `public` folder and add the following content.  
-The `<script>` tag loads our compiled JavaScript and setting `type="module"` enables a the use of JavaScript modules directly in the browser. The `async` and `defer` attributes tell the browser to load our code in the background, without blocking the initial page rendering.
+Create a file named `index.html` in the `public` folder and add the following content:
 
 ```html
 <!DOCTYPE html>
@@ -121,6 +121,8 @@ The `<script>` tag loads our compiled JavaScript and setting `type="module"` ena
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
+    <!-- Load our app.js script -->
+    <!-- Setting type="module" enables modular JS in browser -->
     <script src="/js/app.js" type="module" async defer></script>
   </body>
 </html>
@@ -144,7 +146,7 @@ To launch the server we need to add a new command to the scripts object in `pack
   },
 ```
 
-Open a new terminal window in VSCode and run `yarn dev`. The dev server will startup and serve the `index.html` file over `localhost:8000`. If you change any code in `src/app.ts`, Typescripts will rebuild the code. The server’s watch mode will notice the changes in `public/js` and refresh to show your changes.
+Open a new terminal window in VSCode and run `yarn serve`. The dev server will startup and serve the `index.html` file over `localhost:8000`. If you change any code in `src/app.ts`, Typescript will rebuild the code; the server’s watch mode will notice the changes in `public/js` and refresh to show your changes.
 
 ```bash
 yarn serve
@@ -162,24 +164,22 @@ As one last quality of life improvement, add a final `dev` command which will ru
 ```json
 // package.json
 "scripts": {
-  ...
+  // ...
   "dev": "yarn ts && yarn serve"
 },
 ```
 
 ```bash
-# terminal
 yarn dev # run both Typescript and dev-server in a single command
 ```
 
-Navigate to `http://localhost:8000/` in your browser and you should set the output of our `greet` function from `app.ts`.
+Navigate to `http://localhost:8000/` in your browser and you should see the output of our `greet` function from `app.ts`.
 
 <Image
   src="/assets/blog/typescript-boilerplate-for-frontend/hello-typescript.jpg"
   alt="breakpoint image"
-  width="863"
-  height="378"
-  layout="responsive"
+  width="400"
+  height="170"
 />
 
 Our final directory structure should look something like this:
@@ -201,7 +201,7 @@ Our final directory structure should look something like this:
 
 Debugging allows you to pause your application at runtime and step through it line by line. If you've been relying on `console.log()` to check values at runtime, this is gonna be a big help.
 
-Open `tsconfig.json` and set the following two options. `inlineSourceMap` adds a line to the compiled JavaScript which informs the debugger about the associated sorce file. The `sourceRoot` property is the root folder of our TypeScript source relative to the public folder.
+Open `tsconfig.json`. Add the following two properties to enable sourcemaps and direct them to the `/src` folder.
 
 ```json
 {
@@ -214,9 +214,11 @@ Open `tsconfig.json` and set the following two options. `inlineSourceMap` adds a
 }
 ```
 
-Next we'll generate a `launch.json` file to tell VSCode to how launch a new instance of Chrome and attach to it.
+Now we'll generate a `launch.json` file to tell VSCode to how launch a new instance of Chrome and attach to it.
 
-- In VSCode, press `F1`.
+In VSCode:
+
+- Press `F1`
 - Select `Debug: Select and Start Debugging` -> `Add Configuration...` -> `Chrome`
 - Open `.vscode/launch.json`. Set `"url"` to `"http://localhost:8000"`
 
@@ -237,7 +239,7 @@ Next we'll generate a `launch.json` file to tell VSCode to how launch a new inst
 ```
 
 Finally, add a breakpoint next to a line of code in `app.ts` and hit `F5`.  
-A new Chrome instance will popup and load our project. As soon as the line with a breakpoint is executed the debugger will freeze execution and the current state of our app will be navigable in VSCode.
+A new Chrome instance will open and load our project. As soon as the line with a breakpoint is executed the debugger will freeze execution and the current state of our app will be navigable in VSCode. Step to the next line with `F10` or continue execution with `F5`.
 
 <Image
   src="/assets/blog/typescript-boilerplate-for-frontend/ts-bp-breakpoint.jpg"
@@ -249,5 +251,5 @@ A new Chrome instance will popup and load our project. As soon as the line with 
 
 ## Conclusion
 
-That’s it! We created a Typescript application to use as a boilerplate for any frontend application. I will using be this as a launching point for an upcoming game engine tutorial so stay tuned.
+That’s it! We created a Typescript application to use as a boilerplate for any frontend application. I will using be this as a launching point for an upcoming game engine tutorial so stay tuned.  
 This is my first blog post. I hope this was useful to someone.
