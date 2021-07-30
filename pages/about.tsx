@@ -28,7 +28,7 @@ export default function About({ mdxSource, slug, frontmatter }: AboutPropTypes) 
       </PostPage>
 
       {/* Social links */}
-      <div className="flex flex-row flex-wrap justify-between w-full gap-3">
+      <div className="flex flex-row flex-wrap justify-between w-full gap-3 pt-2 pb-2 sm:pb-6 sm:pt-6">
         <a
           href="https://www.github.com/donanroherty"
           target="_blank"
@@ -50,7 +50,9 @@ export default function About({ mdxSource, slug, frontmatter }: AboutPropTypes) 
         </a>
       </div>
 
-      <ContactForm />
+      <div className="">
+        <ContactForm />
+      </div>
     </div>
   )
 }

@@ -5,14 +5,32 @@ import PostList from "../components/PostList"
 
 type HomeProps = {} & InferGetStaticPropsType<typeof getStaticProps>
 
-export default function Index({ postData }: HomeProps) {
+export default function Index({ blogData, projectsData }: HomeProps) {
   return (
     <div>
       <Head>
         <title>Home - RonanDoherty.com</title>
       </Head>
 
-      <PostList postsData={postData} />
+      <PostList
+        title="Posts"
+        contentFolder="blog"
+        postsData={blogData}
+        // itemMax={3}
+        itemType="listing"
+      />
+
+      {/* spacer */}
+      <div className="w-full h-10"></div>
+
+      <PostList
+        title="Projects"
+        contentFolder="projects"
+        postsData={projectsData}
+        // itemMax={2}
+        colsMax={2}
+        itemType="tile"
+      />
 
       <footer></footer>
     </div>
@@ -20,13 +38,18 @@ export default function Index({ postData }: HomeProps) {
 }
 
 export async function getStaticProps<GetStaticProps>() {
-  const postData = getAllPostFrontmatter("blog").filter(
+  const blogData = getAllPostFrontmatter("blog").filter(
+    (post) => post.frontmatter.published && post.frontmatter.listed
+  )
+
+  const projectsData = getAllPostFrontmatter("projects").filter(
     (post) => post.frontmatter.published && post.frontmatter.listed
   )
 
   return {
     props: {
-      postData,
+      blogData,
+      projectsData,
     },
   }
 }
