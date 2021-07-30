@@ -29,7 +29,7 @@ function PostList({
       <div className="w-full mb-3 font-sans text-xl font-extrabold underline transition-colors duration-500 xs:text-2xl text-heading dark:text-headingDark">
         {title}
       </div>
-      <div className={`grid grid-cols-${colsMax} gap-2`}>
+      <div className={`grid gap-2 grid-cols-postList`}>
         {data.map((data) => (
           <PostListItem
             key={data.slug}

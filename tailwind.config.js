@@ -19,6 +19,9 @@ module.exports = {
       gridTemplateRows: {
         layout: "auto 1fr auto",
       },
+      gridTemplateColumns: {
+        postList: "repeat(auto-fit, minmax(240px, 1fr))",
+      },
       backgroundColor: "bg-green-700",
       fontFamily: {
         title: ["Montserrat"],

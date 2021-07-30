@@ -22,7 +22,7 @@ function PostListItem({ post, slug, showThumbnail = false, showDate = false }: P
         )}
 
         <Link href={slug}>
-          <a>
+          <a className="w-full">
             {showThumbnail && post.thumbnail && (
               <div className="relative w-full h-36">
                 <NextImage
