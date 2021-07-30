@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        // xs: "280px",
+        xs: "376px",
         sm: "715px",
       },
       container: {
@@ -21,6 +21,7 @@ module.exports = {
       },
       gridTemplateColumns: {
         postList: "repeat(auto-fit, minmax(240px, 1fr))",
+        postListItemSmall: "1fr auto",
       },
       backgroundColor: "bg-green-700",
       fontFamily: {
@@ -28,6 +29,9 @@ module.exports = {
         sans: ["Open Sans"],
         serif: ["Charter"],
         mono: ["DankMono"],
+      },
+      fontSize: {
+        xl: ["1.25rem", "1.5rem"],
       },
       colors: {
         title: "#484848",

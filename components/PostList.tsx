@@ -26,10 +26,10 @@ function PostList({
 
   return (
     <div>
-      <div className="w-full mb-3 font-sans text-xl font-extrabold underline transition-colors duration-500 xs:text-2xl text-heading dark:text-headingDark">
+      <div className="w-full mb-3 font-sans text-2xl font-extrabold transition-colors duration-500 text-heading xs:text-2xl dark:text-headingDark">
         {title}
       </div>
-      <div className={`grid gap-2 grid-cols-postList`}>
+      <div className={`grid gap-10 grid-cols-postList mt-6`}>
         {data.map((data) => (
           <PostListItem
             key={data.slug}
@@ -37,6 +37,7 @@ function PostList({
             post={data.frontmatter}
             showDate={showDate}
             showThumbnail={showThumbnail}
+            itemType={itemType}
           />
         ))}
       </div>
