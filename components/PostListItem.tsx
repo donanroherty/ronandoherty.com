@@ -1,6 +1,7 @@
 import React from "react"
 import { PostHeaderData } from "../types/post"
 import Link from "next/link"
+import NextImage, { ImageProps } from "next/image"
 import DateWidget from "./DateWidget"
 
 type PostListItemProps = {
@@ -20,19 +21,29 @@ function PostListItem({ post, slug, showThumbnail = false, showDate = false }: P
           </div>
         )}
 
-        <div>
-          <Link href={slug}>
-            <a>
-              <div className="font-sans text-lg font-extrabold transition-colors duration-500 xs:text-xl text-heading dark:text-headingDark">
-                {post.title}
+        <Link href={slug}>
+          <a>
+            {showThumbnail && post.thumbnail && (
+              <div className="relative w-full h-36">
+                <NextImage
+                  className="filter grayscale "
+                  src={post.thumbnail}
+                  layout="fill"
+                  objectFit="cover"
+                  objectPosition="50% 50%"
+                />
               </div>
-            </a>
-          </Link>
+            )}
 
-          <div className="font-sans text-base transition-colors duration-500 xs:text-lg text-subtitle dark:text-subtitleDark">
-            {post.description}
-          </div>
-        </div>
+            <div className="font-sans text-lg font-extrabold transition-colors duration-500 xs:text-xl text-heading dark:text-headingDark">
+              {post.title}
+            </div>
+
+            <div className="font-sans text-base transition-colors duration-500 xs:text-lg text-subtitle dark:text-subtitleDark">
+              {post.description}
+            </div>
+          </a>
+        </Link>
       </div>
     </div>
   )

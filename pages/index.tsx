@@ -14,17 +14,20 @@ export default function Index({ blogData, projectsData }: HomeProps) {
 
       <PostList
         title="Posts"
-        contentFolder="projects"
-        postsData={projectsData}
-        itemMax={3}
+        contentFolder="blog"
+        postsData={blogData}
+        // itemMax={3}
         itemType="listing"
       />
+
+      {/* spacer */}
+      <div className="w-full h-10"></div>
 
       <PostList
         title="Projects"
         contentFolder="projects"
         postsData={projectsData}
-        itemMax={6}
+        // itemMax={2}
         colsMax={2}
         itemType="tile"
       />

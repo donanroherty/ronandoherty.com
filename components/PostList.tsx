@@ -25,11 +25,11 @@ function PostList({
   const showThumbnail = itemType === "tile"
 
   return (
-    <div className="mt-10 ">
-      <div className="w-full mb-6 font-sans text-xl font-extrabold transition-colors duration-500 xs:text-2xl text-heading dark:text-headingDark">
+    <div>
+      <div className="w-full mb-3 font-sans text-xl font-extrabold underline transition-colors duration-500 xs:text-2xl text-heading dark:text-headingDark">
         {title}
       </div>
-      <div className={`grid grid-cols-${colsMax} gap-6`}>
+      <div className={`grid grid-cols-${colsMax} gap-2`}>
         {data.map((data) => (
           <PostListItem
             key={data.slug}
@@ -40,6 +40,9 @@ function PostList({
           />
         ))}
       </div>
+
+      {/* more */}
+      {/* <div className="w-full h-8 p-6 font-sans text-center text-body">More...</div> */}
     </div>
   )
 }
