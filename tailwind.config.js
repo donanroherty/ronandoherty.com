@@ -99,6 +99,9 @@ const codeBlockStyle = {
     borderBottomRightRadius: "0.5em",
     borderBottomLeftRadius: "0.125em",
     fontWeight: "900",
+    borderColor: "#ededed",
+    borderWidth: ".05em",
+    borderStyle: "solid",
   },
   "code::before": {
     content: "none",
