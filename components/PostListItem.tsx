@@ -1,7 +1,7 @@
 import React from "react"
 import { PostHeaderData } from "../types/post"
 import Link from "next/link"
-import NextImage, { ImageProps } from "next/image"
+import NextImage from "next/image"
 import DateWidget from "./DateWidget"
 
 type PostListItemProps = {
@@ -30,7 +30,7 @@ function PostListItem({
           </div>
         )}
 
-        <Link href={slug}>
+        <Link href={`/${slug}`}>
           <a
             className={`grid w-full grid-cols-postListItemSmall gap-4
             sm:grid-cols-1 ${willShowTN && "sm:grid-rows-2"}`}

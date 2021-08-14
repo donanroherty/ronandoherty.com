@@ -12,7 +12,6 @@ function getPath(dir: ContentType) {
 }
 
 export function getFiles(dir: ContentType) {
-  debugger
   return fs.readdirSync(getPath(dir))
 }
 
