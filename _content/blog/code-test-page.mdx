@@ -1,0 +1,37 @@
+---
+title: "Code test page"
+description: "A page for testing code"
+date: "2021-08-14T10:38:07.072Z"
+thumbnail: null
+published: true
+listed: true
+---
+
+```typescript
+import { Actor } from "./actor"
+
+interface Scene {
+  addActor(actor: Actor): void
+  getStage(): SVGSVGElement
+}
+
+function createScene(stageEl: SVGSVGElement): Scene {
+  const stage = stageEl
+  const actors = new Set<Actor>()
+
+  function addActor(actor: Actor) {
+    actors.add(actor)
+  }
+
+  function getStage() {
+    return stage
+  }
+
+  return {
+    addActor,
+    getStage,
+  }
+}
+
+export { createScene, Scene }
+```
