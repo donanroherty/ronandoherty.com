@@ -28,7 +28,6 @@ export default function Index({ blogData, projectsData }: HomeProps) {
         contentFolder="projects"
         postsData={projectsData}
         // itemMax={2}
-        colsMax={2}
         itemType="tile"
       />
 

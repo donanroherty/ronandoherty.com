@@ -1,5 +1,5 @@
 import React from "react"
-import { getAllPostFrontmatter, getFileBySlug, getFiles } from "../../lib/api"
+import { getAllPostFrontmatter, getFileBySlug } from "../../lib/api"
 import { GetStaticPathsResult, GetStaticProps } from "next"
 import { Params } from "next/dist/next-server/server/router"
 import PostPage from "../../components/PostPage"
