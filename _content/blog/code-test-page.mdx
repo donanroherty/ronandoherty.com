@@ -35,3 +35,36 @@ function createScene(stageEl: SVGSVGElement): Scene {
 
 export { createScene, Scene }
 ```
+
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    // ...
+    "target": "es6",
+    "module": "ES6",
+    "outDir": "./public/js",
+    "rootDir": "./src"
+    // ...
+  }
+}
+```
+
+```md
+- /typescript-app
+  - /node_modules
+  - /public
+    -/js/app.js
+    index.html
+  - /src
+    app.ts
+    package.json
+    tsconfig.json
+    yarn.lock
+```
+
+```bash
+yarn init               # accept default options
+yarn add -D typescript  # add Typescript as a developer dependency
+yarn tsc --init         # create a default tsconfig.json in the project directory
+```
