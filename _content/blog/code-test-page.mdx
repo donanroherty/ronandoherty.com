@@ -1,0 +1,160 @@
+---
+title: "Code test page"
+description: "A page for testing code"
+date: "2021-08-14T10:38:07.072Z"
+thumbnail: null
+published: true
+listed: false
+---
+
+```diff
+diff --git a/src/actor.ts b/src/actor.ts
+index 797b8f4..317acff 100644
+--- a/src/actor.ts
++++ b/src/actor.ts
+@@ -7,6 +7,7 @@ interface Actor {
+   getPosition(): Vec2
+   setPosition(pos: Vec2): void
+   getSVG(): SVGElement
++  draw(elements: SVGElement[]): void
+ }
+
+ function createActor(scene: Scene): Actor {
+@@ -33,17 +34,25 @@ function createActor(scene: Scene): Actor {
+     return position
+   }
+
+-  function setPosition(val: Vec2) {
+-    position = val
++  function setPosition(pos: Vec2) {
++    position = pos
+     svgRoot.setAttribute("transform", `translate(${position.x} ${position.y})`)
+   }
+
++  function draw(elements: SVGElement[]) {
++    while (svgRoot.firstChild) {
++      svgRoot.firstChild.remove()
++    }
++    elements.forEach((el) => svgRoot.appendChild(el))
++  }
++
+   return {
+     getName,
+     setName,
+     getPosition,
+     setPosition,
+     getSVG,
++    draw,
+   }
+ }
+```
+
+```diff
+@@ -0,0 +1,23 @@
++import { Actor, createActor } from "./actor"
++import { Scene } from "./scene"
++
++function createBallActor(scene: Scene): Actor {
++  const self: Actor = {
++    ...createActor(scene),
++  }
++
++  self.setPosition({ x: 0, y: 0 })
++  self.draw(makeBallSVG())
++
++  function makeBallSVG() {
++    const circle = document.createElementNS("http://www.w3.org/2000/svg","circle")
++    circle.setAttribute("fill", "lightblue")
++    circle.setAttribute("stroke", "blue")
++    circle.setAttribute("r", "30")
++    return [circle]
++  }
++
++  return self
++}
++
++export { createBallActor }
+```
+
+```diff
+diff --git a/filea.extension b/fileb.extension
+index d28nd309d..b3nu834uj 111111
+--- a/filea.extension
++++ b/fileb.extension
+@@ -1,6 +1,6 @@
+-oldLine
++newLine
+```
+
+```diff
+public class Hello1
+{
+   public static void Main()
+   {
+-      System.Console.WriteLine("Hello, World!");
++      System.Console.WriteLine("Rock all night long!");
+   }
+}
+```
+
+```typescript
+import { Actor } from "./actor"
+
+interface Scene {
+  addActor(actor: Actor): void
+  getStage(): SVGSVGElement
+}
+
+function createScene(stageEl: SVGSVGElement): Scene {
+  const stage = stageEl
+  const actors = new Set<Actor>()
+
+  function addActor(actor: Actor) {
+    actors.add(actor)
+  }
+
+  function getStage() {
+    return stage
+  }
+
+  return {
+    addActor,
+    getStage,
+  }
+}
+
+export { createScene, Scene }
+```
+
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    // ...
+    "target": "es6",
+    "module": "ES6",
+    "outDir": "./public/js",
+    "rootDir": "./src"
+    // ...
+  }
+}
+```
+
+```md
+- /typescript-app
+  - /node_modules
+  - /public
+    -/js/app.js
+    index.html
+  - /src
+    app.ts
+    package.json
+    tsconfig.json
+    yarn.lock
+```
+
+```bash
+yarn init               # accept default options
+yarn add -D typescript  # add Typescript as a developer dependency
+yarn tsc --init         # create a default tsconfig.json in the project directory
+```

@@ -1,7 +1,7 @@
 import React from "react"
 import { getAllPostFrontmatter, getFileBySlug, getFiles } from "../../lib/api"
 import { GetStaticPathsResult, GetStaticProps } from "next"
-import { Params } from "next/dist/next-server/server/router"
+import { Params } from "next/dist/server/router"
 import PostPage from "../../components/PostPage"
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote"
 

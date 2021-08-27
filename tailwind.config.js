@@ -6,14 +6,15 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        xs: "376px",
+        xs: "480px",
         sm: "715px",
+        md: "843px",
       },
       container: {
         center: true,
         padding: {
           DEFAULT: "1rem",
-          sm: "4rem",
+          xs: "4rem",
         },
       },
       gridTemplateRows: {
@@ -28,7 +29,7 @@ module.exports = {
         title: ["Montserrat"],
         sans: ["Open Sans"],
         serif: ["Charter"],
-        mono: ["DankMono"],
+        mono: ["dm"],
       },
       fontSize: {
         xl: ["1.25rem", "1.5rem"],
@@ -54,13 +55,13 @@ module.exports = {
             h2: h(theme),
             h3: h(theme),
             h4: h(theme),
-            ...codeBlockStyle,
+            ...codeBlockStyle(theme),
           },
         },
-        sm: { css: { ...codeBlockStyle } },
-        lg: { css: { ...codeBlockStyle } },
-        xl: { css: { ...codeBlockStyle } },
-        "2xl": { css: { ...codeBlockStyle } },
+        sm: { css: { ...codeBlockStyle(theme) } },
+        lg: { css: { ...codeBlockStyle(theme) } },
+        xl: { css: { ...codeBlockStyle(theme) } },
+        "2xl": { css: { ...codeBlockStyle(theme) } },
         dark: {
           css: {
             ...typographyThemeCommon(theme),
@@ -82,26 +83,18 @@ module.exports = {
   plugins: [require("@tailwindcss/typography")],
 }
 
-const codeBlockStyle = {
+const codeBlockStyle = (theme) => ({
   pre: {
-    borderTopLeftRadius: "0.125em",
-    borderTopRightRadius: "1.5em",
-    borderBottomRightRadius: "1.5em",
-    borderBottomLeftRadius: "0.125em",
-    // "-webkit-filter": "grayscale(100%)",
-    // filter: "grayscale(100%)",
+    fontSize: "0.8rem",
   },
-  code: {
+  ":not(pre) > code": {
     backgroundColor: "#fafafa",
     padding: ".2em",
-    borderTopLeftRadius: "0.125em",
-    borderTopRightRadius: "0.5em",
-    borderBottomRightRadius: "0.5em",
-    borderBottomLeftRadius: "0.125em",
     fontWeight: "900",
     borderColor: "#ededed",
     borderWidth: ".05em",
     borderStyle: "solid",
+    fontFamily: theme("fontFamily.mono"),
   },
   "code::before": {
     content: "none",
@@ -109,7 +102,7 @@ const codeBlockStyle = {
   "code::after": {
     content: "none",
   },
-}
+})
 const h = (theme) => ({
   fontWeight: "600",
   fontFamily: theme("fontFamily.sans"),
@@ -127,5 +120,9 @@ const typographyThemeCommon = (theme) => ({
   body: {
     textRendering: "optimizeLegibility",
     fontWeight: "normal",
+    fontSize: theme("fontSize"),
+  },
+  code: {
+    fontFamily: theme("fontFamily.mono"),
   },
 })

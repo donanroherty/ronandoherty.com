@@ -1,12 +1,12 @@
 import React from "react"
 import { getAllPostFrontmatter, getFileBySlug } from "../../lib/api"
 import { GetStaticPathsResult, GetStaticProps } from "next"
-import { Params } from "next/dist/next-server/server/router"
 import PostPage from "../../components/PostPage"
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote"
 
 import { PostHeaderData } from "../../types/post"
 import MDXComponents from "../../components/MDXComponents"
+import { Params } from "next/dist/server/router"
 
 type BlogPropTypes = {
   mdxSource: MDXRemoteSerializeResult

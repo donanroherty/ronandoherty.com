@@ -1,5 +1,4 @@
 import "../styles/global.css"
-import "../styles/prism.css"
 import { useEffect } from "react"
 import { AppProps } from "next/app"
 import { useRouter } from "next/router"

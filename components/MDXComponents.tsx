@@ -20,9 +20,7 @@ function CustomLink(
 }
 
 function Image(props: ImageProps) {
-  return (
-    <NextImage className="rounded-tl-sm rounded-bl-sm rounded-tr-3xl rounded-br-3xl" {...props} />
-  )
+  return <NextImage className="rounded-md" {...props} />
 }
 
 type YouTubeProps = {

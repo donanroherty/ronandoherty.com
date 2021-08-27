@@ -3,7 +3,9 @@ import fs from "fs"
 import { join } from "path"
 import matter from "gray-matter"
 import { PostHeaderData } from "../types/post"
-import mdxPrism from "mdx-prism"
+import * as Shiki from "shiki"
+import { Plugin } from "unified"
+import { visit } from "unist-util-visit"
 
 type ContentType = "blog" | "projects" | "pages"
 
@@ -15,13 +17,36 @@ export function getFiles(dir: ContentType) {
   return fs.readdirSync(getPath(dir))
 }
 
+function plugin(options: {
+  highlighter: Shiki.Highlighter
+}): Plugin<[{ highlighter: Shiki.Highlighter }]> {
+  return function visitTree(tree) {
+    visit(tree, "code", pluginVisitor)
+
+    function pluginVisitor(node: any, idx: number | null, parent: any) {
+      if (!node.lang || node.lang.length === 0) return
+
+      node.type = "html"
+      node.children = undefined
+      node.value = options.highlighter
+        .codeToHtml(node.value, node.lang)
+        .replace(
+          '<pre class="shiki"',
+          `<pre class="shiki" language="${node.lang}" meta="${node.meta}"`
+        )
+    }
+  }
+}
+
 export async function getFileBySlug(slug: string, dir: ContentType) {
   const file = fs.readFileSync(join(getPath(dir), `${slug}.mdx`), "utf-8")
   const { data, content } = matter(file)
 
+  const highlighter = await Shiki.getHighlighter({ theme: "github-dark" })
+
   const mdxSource = await serialize(content, {
     mdxOptions: {
-      rehypePlugins: [mdxPrism],
+      remarkPlugins: [[plugin, { highlighter }]],
     },
   })
 
