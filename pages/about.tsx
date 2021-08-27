@@ -1,7 +1,7 @@
 import React from "react"
 import { getFileBySlug } from "../lib/api"
 import { GetStaticProps } from "next"
-import { Params } from "next/dist/next-server/server/router"
+import { Params } from "next/dist/server/router"
 
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote"
 
@@ -10,7 +10,6 @@ import { PostHeaderData } from "../types/post"
 import MDXComponents from "../components/MDXComponents"
 import ContactForm from "../components/ContactForm"
 import Icon from "../components/Icon"
-import icons from "../components/Icon"
 
 type AboutPropTypes = {
   mdxSource: MDXRemoteSerializeResult

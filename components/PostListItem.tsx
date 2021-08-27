@@ -32,18 +32,18 @@ function PostListItem({
 
         <Link href={`/${slug}`}>
           <a
-            className={`grid w-full grid-cols-postListItemSmall gap-4
+            className={`grid w-full grid-cols-postListItemSmall gap-4 
             sm:grid-cols-1 ${willShowTN && "sm:grid-rows-2"}`}
           >
             {willShowTN && (
               <div
                 className={`
-                relative order-last w-20 h-20 my-auto
+                relative order-last w-20 h-20 my-auto rounded-md overflow-hidden
                 sm:order-none sm:h-36 sm:w-full sm:mx-auto
               `}
               >
                 <NextImage
-                  className="filter grayscale "
+                  className="filter grayscale"
                   src={post.thumbnail}
                   layout="fill"
                   objectFit="cover"

@@ -8,6 +8,75 @@ listed: false
 ---
 
 ```diff
+diff --git a/src/actor.ts b/src/actor.ts
+index 797b8f4..317acff 100644
+--- a/src/actor.ts
++++ b/src/actor.ts
+@@ -7,6 +7,7 @@ interface Actor {
+   getPosition(): Vec2
+   setPosition(pos: Vec2): void
+   getSVG(): SVGElement
++  draw(elements: SVGElement[]): void
+ }
+
+ function createActor(scene: Scene): Actor {
+@@ -33,17 +34,25 @@ function createActor(scene: Scene): Actor {
+     return position
+   }
+
+-  function setPosition(val: Vec2) {
+-    position = val
++  function setPosition(pos: Vec2) {
++    position = pos
+     svgRoot.setAttribute("transform", `translate(${position.x} ${position.y})`)
+   }
+
++  function draw(elements: SVGElement[]) {
++    while (svgRoot.firstChild) {
++      svgRoot.firstChild.remove()
++    }
++    elements.forEach((el) => svgRoot.appendChild(el))
++  }
++
+   return {
+     getName,
+     setName,
+     getPosition,
+     setPosition,
+     getSVG,
++    draw,
+   }
+ }
+```
+
+```diff
+@@ -0,0 +1,23 @@
++import { Actor, createActor } from "./actor"
++import { Scene } from "./scene"
++
++function createBallActor(scene: Scene): Actor {
++  const self: Actor = {
++    ...createActor(scene),
++  }
++
++  self.setPosition({ x: 0, y: 0 })
++  self.draw(makeBallSVG())
++
++  function makeBallSVG() {
++    const circle = document.createElementNS("http://www.w3.org/2000/svg","circle")
++    circle.setAttribute("fill", "lightblue")
++    circle.setAttribute("stroke", "blue")
++    circle.setAttribute("r", "30")
++    return [circle]
++  }
++
++  return self
++}
++
++export { createBallActor }
+```
+
+```diff
 diff --git a/filea.extension b/fileb.extension
 index d28nd309d..b3nu834uj 111111
 --- a/filea.extension

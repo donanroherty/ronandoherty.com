@@ -6,14 +6,15 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        xs: "376px",
+        xs: "480px",
         sm: "715px",
+        md: "843px",
       },
       container: {
         center: true,
         padding: {
           DEFAULT: "1rem",
-          sm: "4rem",
+          xs: "4rem",
         },
       },
       gridTemplateRows: {
@@ -89,10 +90,6 @@ const codeBlockStyle = (theme) => ({
   ":not(pre) > code": {
     backgroundColor: "#fafafa",
     padding: ".2em",
-    borderTopLeftRadius: "0.125em",
-    borderTopRightRadius: "0.5em",
-    borderBottomRightRadius: "0.5em",
-    borderBottomLeftRadius: "0.125em",
     fontWeight: "900",
     borderColor: "#ededed",
     borderWidth: ".05em",
@@ -123,6 +120,7 @@ const typographyThemeCommon = (theme) => ({
   body: {
     textRendering: "optimizeLegibility",
     fontWeight: "normal",
+    fontSize: theme("fontSize"),
   },
   code: {
     fontFamily: theme("fontFamily.mono"),
