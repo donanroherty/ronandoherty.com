@@ -1,6 +1,8 @@
+import React from "react"
 import Link from "next/link"
 import NextImage, { ImageProps } from "next/image"
 import { AnchorHTMLAttributes, DetailedHTMLProps } from "react"
+import path from "path"
 
 function CustomLink(
   props: DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>
@@ -46,10 +48,17 @@ function YouTube(props: YouTubeProps) {
   )
 }
 
+function BoidsElement(props: any) {
+  // @ts-ignore
+  React.useEffect(() => import("../web-components/boids-element.mjs"), [])
+  return <boids-element {...props} />
+}
+
 const MDXComponents = {
   a: CustomLink,
   Image,
   YouTube,
+  "boids-element": BoidsElement,
 }
 
 export default MDXComponents

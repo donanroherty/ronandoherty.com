@@ -1,0 +1,272 @@
+---
+title: "Boids - Simulating life"
+description: "Creating a flocking simulation in JavaScript"
+date: "2022-06-20T19:10:13.417Z"
+thumbnail: null
+published: true
+listed: true
+---
+
+<boids-element width={640} height={300}></boids-element>
+
+A little over a month ago I was holed up in a hotel in Phnom Penh, Cambodia. I was supposed to be staying somewhere new every other night but the day I arrived in Cambodia I was struck with a toothache so bad I couldn't leave my hotel.
+
+I watched people from my hotel window as they weaved between and around each other, following friends and dodging speeding tuk tuks. It reminded me of boids simulations I had seen online. I decided to take advantage of my downtime and start a new project.
+
+Find the repo here: https://github.com/donanroherty/Boids
+
+## What is boids?
+
+Boids is an algorithm to simulate the emergent behaviour of flocking animals. Each boid is an independent agent which alters it's own velocity in an attempt to stay close to other boids.  A boid is essentially a particle which reacts to forces applied to it.
+
+A boid uses 3 primary forces to control its movement in a group:
+
+- **Cohesion** guides a boid towards the center of a group, which is the average position of all other agents in visible range of our boid.
+
+- **Alignment** attempts to match a boids velocity (direction and speed) to its neighbours.  
+
+- **Separation** creates space between boids, reducing collisions and spreading out flockmates over a larger area.
+
+The combination of these 3 forces enable a group of boids to self organise, flying as a group without overlapping.  Groups can join other groups or dynamically split apart depending on how these 3 forces are tuned.
+
+To create a more realistic result I have also added a **drag** force to simulate air or fluid friction.  
+
+Additionally there is an enforced **minimum and maximum speed** to prevent unrealistic behaviour.  A bird can not have a speed of zero without falling out of the sky.  Max speed can also be a balancing factor to prevent a boid from gaining too much momentum from a force and repeatedly punching through the middle of a flock without finding an equilibrium.
+
+## Code overview
+Clone the code at tag v1.0.0 to follow along:
+```bash
+git clone --depth 1 --branch v1.0.0 https://github.com/donanroherty/Boids.git
+```
+
+### File structure
+```md
+- /boids/
+    app.js
+    boid.js
+    flock.js
+    tick.js
+    vec2.js
+    index.html
+    jsconfig.json
+    package.json
+    README.md
+- /gui/
+    ...
+```
+
+The `/gui/` folder contains a SolidJS app which wraps the boids code, adds controls to the main parameters and builds to the web component at the top of this page.  Have a play with it and then jump into the `/boids/` folder.
+
+The files to pay attention to are:
+- `app.js` initializes the canvas, creates a flock and creates a tick routine which updates the simulation and draws the boids every frame.
+- `boid.js` implements a single boid with all the forces necessary to create it's emergent behaviour.
+- `flock.js` creates and stores boids in a list.  Update and draw calls are propogated to the boids through the flock.
+- `tick.js` creates a repeating timestep.  The timestep is fixed, always producing a deltatime of 1/60th of a second.  It will cap out at this framerate but may run slower with more boids to compute.
+- `vec2.js` is a collection of useful vector operations.
+
+For this article I will focus on the implementation of a single boid in `boids.js`. Everything else should be easy enough to figure out by reading the code.
+
+
+### Boid implementation
+```js
+// /src/boid.js
+// ...
+function createBoid(pos, vel, canvas) {
+  let position = pos
+  let velocity = vel
+
+  let config = {
+    size: 5,
+    detectionRange: 50,
+    cohesionFactor: 0.2,
+    alignmentMaxStrength: 0.3,
+    separationMaxStrength: 10,
+    separationRange: 30,
+    dragFactor: 0.01,
+    minSpeed: 50,
+    maxSpeed: 150,
+  }
+  // ...
+```
+
+Lets jump into the boid implementation.  A boid has a `position` that is mutated each timestep by a `velocity` vector.  Velocity is accumulated by adding forces to it each frame.  The primary forces are **cohesion**, **alignment** and **separation**, however I also added a **drag** factor to simulate air density and a **min** and **max** speed to ensure movement remains within realistic limits.
+
+Beneath the position and velocity variables are the boid tuning parameters.
+
+#### Updating the simulation
+
+```js
+// /src/boid.js
+// ...
+   function update(dt, boids) {
+    const boidsInRange = boids.filter(
+      (b) =>
+        position !== b.getPosition() &&
+        position.sub(b.getPosition()).lenSq() < config.detectionRange * config.detectionRange
+    )
+
+    if (boidsInRange.length > 0) {
+      addForce(cohesion(boidsInRange))
+      addForce(alignment(boidsInRange))
+      addForce(separation(boidsInRange))
+    }
+
+    velocity = velocity.clampedLen(config.minSpeed, config.maxSpeed)
+    addForce(drag())
+
+    position = position.add(velocity.scale(dt))
+
+    mirrorOutOfBounds()
+  }
+  // ...
+```
+
+Each frame, **`update(dt, boids)`** is called with arguments for deltatime and an array of all boids.
+
+- **`dt`** is the timestep between frames.  This is provided by the tick function and is used to calculate the proportion of the velocity vector to apply to the boids position each frame.  As I'm using a fixed timestep of 60 frames per second `dt` will always be 1/60 = .01666 seconds.
+
+- **`boids`** is a list of all boids in the flock. 
+
+The `boids` list is filtered and assigned to `boidsInRange`, which should only contain agents which are not the current boid and within the boids detection range.
+
+
+*Adding forces*
+
+`addForce` is now called for each of our forces `cohesion`, `alignment`, `separation` and `drag`.  Each call to `addForce` mutates the current velocity vector as `velocity=velocity+force`.
+
+We wrap the `cohesion`, `alignment` and `separation` forces in an if statment checking `boidsInRange.length` as there's no point computing these forces if there is no boids within range.
+
+*Speed limits*
+
+`velocity`'s length is clamped between `minSpeed` and `maxSpeed`.
+
+*Updating the position*
+
+A new position for the boid is calculated as `position + (velocity * deltatime` and applied to position.
+
+*Handling boids that fly off screen*
+
+Finally `mirrorOutOfBounds()` is called to check if a boid has flown out of the canvas.  Boids that fly through a border are teleported to the opposite side of the canvas.
+
+## The force functions
+
+### Cohesion
+```js
+  function cohesion(boids) {
+    const avgPos = boids
+      .reduce((acc, b) => {
+        acc = acc.add(b.getPosition())
+        return acc
+      }, vec2())
+      .div(vec2(boids.length, boids.length))
+
+    const toGroupCenter = avgPos.sub(position)
+    return toGroupCenter.scale(config.cohesionFactor)
+  }
+```
+
+Cohesion is a force which a boid uses to move towards the center it's of fellow boids within range.  We pass `cohseion(boids)` all the flockmates in range and calculate the average position by getting the sum of all positions and dividing by the number of boids.
+
+`toGroupCenter` is a vector pointing to the average ceter of the nearby flockmates.  This can be thought of as the speed and direction the boid must move to reach the flock center.  The further a boid is from the center, the longer `toGroupCenter` will be and the faster the boid will try to accelerate towards it's flockmates.  We scale `toGroupCenter` by `cohesionFactor` to give us more control of the cohesion force.
+
+### Alignment
+```js
+  function alignment(boids) {
+    const avgVel = boids
+      .reduce((acc, b) => {
+        acc = acc.add(b.getVelocity())
+        return acc
+      }, vec2())
+      .div(vec2(boids.length, boids.length))
+
+    const diff = avgVel.sub(velocity)
+    return diff.clampedLen(0, config.alignmentMaxStrength)
+  }
+```
+Alignment steers a boid to move in the same direction and speed as its flockmates.  Similar to cohesion, we get the average velocity (`avgVel`) of each flockmate.  We subtract the boids `velocity` from the `avgVel` to get the force necessary to match the groups speed and direction.  Again, we want to control the strength of this force using `alignmentMaxStrength`.  The resulting force will gradually cause our boid to match the direction and speed of its flockmates.
+
+### Separation
+```js
+  function separation(boids) {
+    const boidsTooClose = boids.filter(
+      (b) => position.sub(b.getPosition()).lenSq() < config.separationRange * config.separationRange
+    )
+
+    return boidsTooClose.reduce((acc, other) => {
+      const ba = getPosition().sub(other.getPosition())
+      const dist = ba.len()
+
+      const perc = 1 - dist / config.separationRange
+      return acc.add(ba.norm().scale(config.separationMaxStrength * perc))
+    }, vec2())
+  }
+```
+
+Separation is a force which pushes a boid away from other boids within range to prevent collisions.  Try standing too close to one of your friends and you'll see why it's necessary.  We want to add a force in the opposite direction, making it stronger when flockmates are very close, and weaker when they are further away.
+
+We filter the flockmates into a new array, `boidsTooClose`, which is all boids closer than `separationRange`.
+
+Now we reduce `boidsTooClose` into a vector force.  For every flockmate that is too close for comfort, we get a vector (`ba`) pointing from the flockmate to our boid and distance (`dist`) to the flockmate from this vector.
+
+We calculate `perc` as value between 0 and 1 representing how far the flockmate is encroaching on our personal space.  Now we create a force in the direction of `ba` and scale it by `separationMaxStrength` and `perc`.  The larger `perc` is, the more seperation strength is applied.
+
+Each iteration of the reduce function accumulates a force which will move our boid away from it's encroaching flockmates.
+
+### Drag
+```js
+  function drag() {
+    return velocity.scale(-config.dragFactor)
+  }
+```
+Drag reduces a boids speed as it passes through the air.  Each frame, we add an opposing force to the velocity scaled by the `dragFactor`.  This makes our boid tend to move at it's `minSpeed` most of the time rather than sitting at its max speed as if it was flying through space.
+
+## A note about the tick function
+```js
+// ./src/tick.js
+function createTick(tickFn) {
+  const targetFPS = 60
+  let timeout
+  let lastRealDelta
+
+  doTick_R(performance.now())
+
+  function doTick_R(timestamp) {
+    const now = performance.now()
+
+    tickFn(1 / targetFPS)
+
+    timeout = setTimeout(() => {
+      doTick_R(now)
+      lastRealDelta = now - timestamp
+    }, 1000 / targetFPS)
+
+    return timeout
+  }
+
+  return {
+    targetFPS,
+    getTimeout: () => timeout,
+    getLastRealDelta: () => lastRealDelta,
+  }
+}
+```
+
+`app.js` calls `createTick` passing an update function as an argument.  Each tick, the update function clears the canvas, updates the simulation and draws the updated scene to the canvas.
+
+I used a simple fixed rate tick function for this project. A fixed rate ensures that each frame will have the exact same delta time which gives consistant behaviour every frame. I originally tried using a variable framerate, however as computation time varies based on the number of boids and how close they are to each other, the simulation becomes very unstable when subjected to vastly different deltatimes.
+
+I settled for a fixed tick rate of 60 updates per second.  A frame may take longer but delta time will always be the same.
+
+## Conclusion
+That's the meat and potatoes of the boids algorithm.  The supporting code in the other files should be self explanatory.
+
+Where to go from here? Well there's a lot of ways to add more dynamism and interesting interactions to these simple rules.  I hope to add some of the following features and write about them soon:
+- Predators boids
+- Multiple flocks interacting
+- Obstical avoidence
+- Wind and and air turbulance
+- Feeding and goals
+- Birth and death cycles
+- Making the system 3D
+- Tune parameters for various agent types (birds, fish, peole, cars, spaceships)
+- The list goes on...
