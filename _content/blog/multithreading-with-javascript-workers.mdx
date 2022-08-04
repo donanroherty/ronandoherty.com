@@ -1,0 +1,264 @@
+---
+title: "Multithreading with JavaScript Web Workers"
+description: "Using a Web Worker pool to distribute expensive ops to other threads"
+date: "2022-07-01T13:32:33.922Z"
+thumbnail: null
+published: true
+listed: true
+---
+
+As I continue to work on my boids project I've hit the inevitable desire to add increasing numbers of boids into the simulation,  `(moreBoids === true)` right?  The problem is boids, in the worst case, has a time complexity of O(n2); every boid has to query and react to every other boid.  This gets slow fast!
+
+I've played around with using quad trees to reduce the number of boids considered for interactions but quad trees are only useful when flocks are well spread out.  When all the boids are rubbing shoulders I'm back to O(n2) with the added performance overhead of building and querying a quad tree.
+
+I've known about [Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) for some time but hadn't found a good use for them in other projects, but I think I've found my muse to dig into Web Workers a bit deeper.
+
+In this article I will present an overview of Web Workers, their pros and cons and my own minimal example of using a pool of Web Workers to perform a number of expensive tasks concurrently across multiple threads.
+
+## Web Workers
+While JavaScript is a single threaded language, browser API's expose Web Workers as an option for running tasks in another thread.  Web Workers run outside the scope of the current JavaScript 'window' context and they do not block the main thread from doing what it was designed for, updating the DOM.
+
+**The event loop**
+
+JavaScript runs on an [Event Loop](https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop) model.
+When a function is called, a stack frame is created and added to the call stack.  Functions are popped off the stack and executed until the stack is empty, at which point JavaScript processes events.
+
+Events, such as `onclick` and `onmouseover`, are added to the event queue immediately when triggered, however they are not processed until the call stack is empty.  For this reason, filling the stack with functions which take a long time to execute delays the processing of events which leads to a user's actions being delayed, creating a miserable user experience.
+
+A way to combat this is to run heavy code in another Worker thread and using a JavaScript Promise to notify us when the work is complete.  A worker has it's own contained call-stack which it will work through in the background.  When work is complete the Worker will post a message back to the main thread and we can update the UI accordingly.
+
+**Pooling Web Workers**
+
+Web Workers can speed up operations by running them in parallel to the main thread, but there is an overhead to creating and destroying a Worker.  If we were to create a new Web Worker for each operation we would run into performance issues pretty fast and possibly crash our app if we try to provision more Workers that the browser allows.  We need a way to reuse Worker threads rather than creating new ones all the time and pooling is perfect for the job.
+
+Pooling is a technique which allows the creation of a fixed number of long-lived instances which can be reused many times throughout their lifetime.  Combining a pool with a queue system allows us to queue up an number of jobs which will be provisioned to the pooled Workers as and when the become available.
+
+**Trade offs**
+
+The tradeoff with doing work in a separate thread is the same as multi-threading in any other language, communicating between threads is limited.  Workers do not have access to variables or functions in the scope that created them.  Messages containing simple objects and primitives can be passed between the main thread and worker threads, however as objects are cloned and serialized when passed through a message, references are lost.
+
+### Creating a Web Worker
+
+```js
+// index.js
+const worker = new Worker("worker.js", { type: "module" })
+worker.onmessage = (event) => { console.log(event.data )}
+worker.postMessage({/*any data here */})
+
+// worker.js
+onmessage = function onMessage(event) {
+    const res = expensiveOp(event.data)
+    postMessage(res)
+}
+```
+
+A Worker thread is created by calling `new Worker(scriptUrl, options)`, passing it a url to a separate worker script.  As Workers predate the inclusion of modules in JavaScript, module functionality such as imports and exports are not available by default. It is necessary to provide an options object, `{ type: "module" }`, to ensure a Worker script is interpreted as a module.
+
+`worker.postMessage()` calls an event on the worker with whatever data the Worker requires.
+
+A handler function is assigned to `worker.onmessage` to handle responses from the Worker thread.
+
+`worker.js` is a separate file containing the code we want to run on a worker.  It's `onmessage` event handler is run when another thread posts a message to it.  After executing its `onmessage` handler, the Worker posts a message back to the thread that created it.
+
+If you have one large task to perform, this code may be all you need to send it to another thread and process it in the background.
+
+
+
+
+## Creating a Web Worker pool
+The following is an implementation of a Web Worker pool.
+
+You can find a more complete example with benchmarks at: https://github.com/donanroherty/Web-Worker-Pool, but I'll just focus on the pool implementation here.
+
+
+### The files
+`worker.js` - A script passed to a Worker in instantiation.  Workers require the code they run to be held in a dedicated file.
+
+`queue.js` - A simple queue system used to hold jobs while they wait to be processed by the Worker pool.
+
+`workerPool.js` - Exports `createWorkerPool()` which creates a number of Workers and manages the execution of jobs stored in the queue.
+
+
+### worker.js
+This is the code we will run in each of our Workers. Each operation we want to send to a Worker needs to be defined in it's own file and should define a handler for the `onmessage` event so that so that the main thread can communicate with it via `postMessage()`.  Here we execute a loop which performs 10 million square root operations. This takes my machine about 50 milliseconds to run.
+
+It's important to understand that any data passed to a Worker via postMessage is cloned and serialized, therefore references are not maintained and functions, which can not be serialized, are not allowed as arguments.
+
+```js
+import { expensiveOp } from "./lib.js"
+
+onmessage = function onMessage(event) {
+    let sqRt = 0
+    for (let i = event.data; i < 10000000; i++) {
+      sqRt = Math.sqrt(i)
+    }
+    postMessage(sqRt)
+}
+```
+
+### queue.js
+A queue is a data structure designed to enable storage and access of data in a 'first in first out' fashion, just like a queue at the supermarket.  Enqueued items are added to the tail of the data structure and later accessed by dequeueing them from the head of the queue.  We will use the queue to store jobs until a worker is available to process them.  When a worker is ready to process a job, it will dequeue an item off the head of the queue and work on it.
+
+```js
+function createQueue() {
+  const items = {}
+  let head = 0
+  let tail = 0
+
+  function enqueue(item) {
+    items[tail] = item
+    tail++
+  }
+
+  function dequeue() {
+    const item = items[head]
+    delete items[head]
+    head++
+    return item
+  }
+
+  function length() {
+    return tail - head
+  }
+
+  function isEmpty() {
+    return length() === 0
+  }
+
+  return {
+    enqueue,
+    dequeue,
+    length,
+    isEmpty,
+  }
+}
+
+export { createQueue }
+```
+
+### workerPool.js
+The Worker Pool orchestrates the provision of jobs to a set of available Worker threads.  It spawns a number Workers and passes them jobs from the queue to be processed until all jobs are complete and the queue is empty.
+
+When a new job is created via `addJob`, a Promise is created and returned.  Inside this promises executor, a job object is instantiated and added to the queue.  When this job has been completed by a worker its `onComplete` callback is called which will resolve the promise.
+
+`createWorker` will instantiate a new worker and return an object containing the worker instance, a flag to check its busy status, and a function `doWork` to assign it a job.  `doWork` assigns functions to handle messages posted by the Worker to the main thread. These handlers call `onJobComplete` which in turn calls the jobs completion or failure callback.
+
+`createWorkerPool` returns the `addJob` and `terminate` functions.  Terminate will immediately destroy all Worker instances.
+
+We call `addJob` from the main thread to send work to the Worker pool.  As each job returns a Promise, we can await the resolution of this promise in the main thread and update the UI accordingly without blocking the event queue.
+
+
+```js
+import { createQueue } from "./queue.js"
+
+function createWorkerPool(poolSize, url) {
+  const pool = new Array(poolSize).fill(undefined).map((_) => createWorker(url, onJobComplete))
+  const queue = createQueue()
+
+  async function addJob(data) {
+    return new Promise((resolve, reject) => {
+      const job = {
+        data,
+        onComplete: resolve,
+        onFailure: reject,
+      }
+      queue.enqueue(job)
+      startNextJob()
+    })
+  }
+
+  // create a new Web Worker and set up message handling
+  function createWorker(url, onJobComplete) {
+    const worker = new Worker(url, { type: "module" }) // type: 'module' runs script as a module, enabling imports
+    let busy = false
+
+    function doWork(job) {
+      busy = true
+
+      // handle success
+      worker.onmessage = function onWorkerMessage(event) {
+        busy = false
+        onJobComplete(job, event.data)
+      }
+
+      // handle errors
+      worker.onerror = function onWorkerError(err) {
+        busy = false
+        onJobComplete(job, {}, err)
+      }
+
+      worker.postMessage(job.data) // send data message to worker
+    }
+
+    function isBusy() {
+      return busy
+    }
+
+    return { worker, isBusy, doWork }
+  }
+
+  function onJobComplete(job, result, err = undefined) {
+    if (err) job.onFailure(err)
+    else job.onComplete(result)
+
+    startNextJob()
+  }
+
+  function startNextJob() {
+    if (!queue.isEmpty()) {
+      const worker = pool.find((worker) => !worker.isBusy())
+      if (worker) worker.doWork(queue.dequeue())
+    }
+  }
+
+  function terminatePool() {
+    pool.forEach((p) => p.worker.terminate())
+  }
+
+  return { addJob, terminatePool }
+}
+
+export { createWorkerPool }
+
+```
+
+### Adding jobs in the main thread
+Finally we can add a number of jobs to our worker pool in the main thread.  We create a new worker pool with `createWorkerPool`, passing it arguments for the number of Workers and the worker script to execute, `worker.js`.
+We ask the browser for the number of available threads using `navigator.hardwareConcurrency`, but default to 4 if this is unavailable.
+
+`addJob` returns a Promise which is resolved when the job is completed.  We add these promises to the array `promises` and afterwards await the resolution of all these promises with `await Promise.all(promises)`.
+
+```js
+// index.js
+async function runWorkers() {
+  // number of available threads, defaults to 4
+  const numWorkers = navigator.hardwareConcurrency || 4
+  // create a worker pool to run "worker.js"
+  const workerPool = createWorkerPool(numWorkers, "worker.js") 
+  const promises = []
+
+  // Provision jobs to the queue
+  for (let i = 0; i < 200; i++) {
+    promises.push(workerPool.addJob(8))
+  }
+
+  // wait for all jobs to complete
+  await Promise.all(promises)
+
+  // ... update UI
+}
+```
+
+## Conclusion
+And that's it!  We can provision computationally heavy jobs en masse to multiple threads without blocking the main thread and completing them much faster than if we were to execute them synchronously.
+
+There's still room to improve on this solution.  Here's some more Web Worker idea I'm learning about:
+
+- Maintain long lived worker instances to save on setup/teardown/garbage collection costs.
+- Maintain Workers for different tasks or update the pool dynamically based on the jobs in the queue.
+- Add more robust error handling for jobs prone to error or other failure condition.
+- Share an ArrayBuffer between Workers to, for instance, process an images pixels in chunks concurrently.
+
+Hope this is helpful to somebody.
+
+

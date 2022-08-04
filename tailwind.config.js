@@ -85,7 +85,7 @@ module.exports = {
 
 const codeBlockStyle = (theme) => ({
   pre: {
-    fontSize: "0.8rem",
+    fontSize: "0.9rem",
   },
   ":not(pre) > code": {
     backgroundColor: "#fafafa",
