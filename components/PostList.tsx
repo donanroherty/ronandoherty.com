@@ -1,22 +1,13 @@
 import React from "react"
-import { PostHeaderData } from "../types/post"
-import PostListItem from "./PostListItem"
 
 type PostListProps = {
   title: string
-  contentFolder: string
   itemMax?: number
-  itemType: "listing" | "tile"
-  postsData: Array<{ slug: string; frontmatter: PostHeaderData }>
+  multiCol?: boolean
+  children: React.ReactNode | React.ReactNode[]
 }
 
-function PostList({ postsData, title, contentFolder, itemMax, itemType }: PostListProps) {
-  const data = itemMax ? postsData.slice(0, itemMax) : postsData
-
-  const showDate = itemType === "listing"
-  const showThumbnail = itemType === "tile"
-  const multiCol = itemType === "tile"
-
+function PostList({ multiCol, title, itemMax, children }: PostListProps) {
   return (
     <div>
       <div
@@ -25,18 +16,7 @@ function PostList({ postsData, title, contentFolder, itemMax, itemType }: PostLi
       >
         {title}
       </div>
-      <div className={`grid gap-6 ${multiCol && "grid-cols-postList"}  mt-6`}>
-        {data.map((data) => (
-          <PostListItem
-            key={data.slug}
-            slug={`${contentFolder}/${encodeURI(data.slug)}`}
-            post={data.frontmatter}
-            showDate={showDate}
-            showThumbnail={showThumbnail}
-            itemType={itemType}
-          />
-        ))}
-      </div>
+      <div className={`grid gap-6 w-full mt-6`}>{children}</div>
 
       {/* more */}
       {/* <div className="w-full h-8 p-6 font-serif font-bold text-center text-subtitle">More...</div> */}
