@@ -1,0 +1,26 @@
+---
+title: "Boids"
+description: "Flocking simulation built with Typescript and React"
+date: "2022-08-04T11:25:06.687Z"
+thumbnail: "/assets/blog/beatdaddy/beatdaddy-tn.png"
+published: true
+listed: true
+---
+
+
+<iframe title="boids" width="714" height="714" src="https://boids-embedded-deployment.vercel.app"></iframe>
+
+Source: https://github.com/donanroherty/Boids
+
+
+This is my overbaked version of the classic Boids algotithm, an artificial life simulation first written by Craig Reynolds in 1986.
+I say overbaked beacuse the original algorithm uses just 3 simple force; Cohesion, Alignment and Separation.  Hovever there's a lot of room to add to these rules.  Here's list of some things I've included in my version:
+
+
+- Predator boids which hunt smaller boids
+- Spatial Hashing for boid and collider lookup
+- Quad Tree for boid lookup
+- Interactions between flocks
+- Obstacle avoidance
+- Swept collisions with static geometry
+- Field of view controls

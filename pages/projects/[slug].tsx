@@ -1,7 +1,6 @@
 import React from "react"
-import { getAllPostFrontmatter, getFileBySlug, getFiles } from "../../lib/api"
-import { GetStaticPathsResult, GetStaticProps } from "next"
-import { Params } from "next/dist/server/router"
+import { getAllPostFrontmatter, getFileBySlug } from "../../lib/api"
+import { GetStaticPropsContext } from "next"
 import PostPage from "../../components/PostPage"
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote"
 
@@ -22,7 +21,7 @@ export default function Blog({ mdxSource, slug, frontmatter }: BlogPropTypes) {
   )
 }
 
-export async function getStaticPaths<GetStaticPaths>() {
+export async function getStaticPaths() {
   const postData = getAllPostFrontmatter("projects").filter((post) => post.frontmatter.published)
   const params = postData.map((frontmatter) => ({
     params: {
@@ -36,7 +35,7 @@ export async function getStaticPaths<GetStaticPaths>() {
   }
 }
 
-export async function getStaticProps<GetStaticProps>({ params }: Params) {
-  const post = await getFileBySlug(params.slug, "projects")
+export async function getStaticProps({ params }: GetStaticPropsContext) {
+  const post = await getFileBySlug(params!.slug as string, "projects")
   return { props: post }
 }

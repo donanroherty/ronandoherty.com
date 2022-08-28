@@ -1,10 +1,6 @@
 import React from "react"
 import { getFileBySlug } from "../lib/api"
-import { GetStaticProps } from "next"
-import { Params } from "next/dist/server/router"
-
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote"
-
 import PostPage from "../components/PostPage"
 import { PostHeaderData } from "../types/post"
 import MDXComponents from "../components/MDXComponents"
@@ -56,7 +52,7 @@ export default function About({ mdxSource, slug, frontmatter }: AboutPropTypes) 
   )
 }
 
-export async function getStaticProps<GetStaticProps>({ params }: Params) {
+export async function getStaticProps() {
   const postData = await getFileBySlug("about", "pages")
   return { props: postData }
 }

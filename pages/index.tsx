@@ -1,11 +1,12 @@
-import { GetStaticProps, InferGetStaticPropsType } from "next"
+import { InferGetStaticPropsType } from "next"
 import { getAllPostFrontmatter } from "../lib/api"
 import Head from "next/head"
 import PostList from "../components/PostList"
+import PostListItem from "../components/PostListItem"
 
 type HomeProps = {} & InferGetStaticPropsType<typeof getStaticProps>
 
-export default function Index({ blogData, projectsData }: HomeProps) {
+export default function Index({ posts, projects }: HomeProps) {
   return (
     <div>
       <Head>
@@ -14,41 +15,60 @@ export default function Index({ blogData, projectsData }: HomeProps) {
 
       <PostList
         title="Posts"
-        contentFolder="blog"
-        postsData={blogData}
         // itemMax={3}
-        itemType="listing"
-      />
+      >
+        {posts.map((p) => (
+          <PostListItem
+            key={p.slug}
+            slug={`blog/${p.slug}`}
+            title={p.frontmatter.title}
+            date={p.frontmatter.date}
+            description={p.frontmatter.description}
+            showDate
+          />
+        ))}
+      </PostList>
 
       {/* spacer */}
       <div className="w-full h-10"></div>
 
       <PostList
         title="Projects"
-        contentFolder="projects"
-        postsData={projectsData}
+        multiCol
         // itemMax={2}
-        itemType="tile"
-      />
+      >
+        {projects.map((p) => (
+          <PostListItem
+            key={p.slug}
+            slug={`projects/${p.slug}`}
+            title={p.frontmatter.title}
+            date={p.frontmatter.date}
+            description={p.frontmatter.description}
+            thumbnail={p.frontmatter.thumbnail}
+            // showThumbnail
+            showDescription={false}
+          />
+        ))}
+      </PostList>
 
       <footer></footer>
     </div>
   )
 }
 
-export async function getStaticProps<GetStaticProps>() {
-  const blogData = getAllPostFrontmatter("blog").filter(
+export async function getStaticProps() {
+  const posts = getAllPostFrontmatter("blog").filter(
     (post) => post.frontmatter.published && post.frontmatter.listed
   )
 
-  const projectsData = getAllPostFrontmatter("projects").filter(
+  const projects = getAllPostFrontmatter("projects").filter(
     (post) => post.frontmatter.published && post.frontmatter.listed
   )
 
   return {
     props: {
-      blogData,
-      projectsData,
+      posts,
+      projects,
     },
   }
 }
