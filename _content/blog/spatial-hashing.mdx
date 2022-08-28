@@ -1,0 +1,163 @@
+---
+title: "Spatial Hashing"
+description: ""
+date: '2022-08-28T09:46:23.568Z'
+thumbnail: null
+published: true
+listed: true
+---
+
+
+Lets say you want to find all the cafes around you right now.  You type “restaurants near me” into Google which will return a list of all cafes within say 5 kilometers.  But depending where you live there could be hundreds of cafes neaby and to return a list of relevant cafes Google must measure the distance between you and every cafe in order to find the ones closest to you.
+
+This kind of operation might not be so slow in isolation but scale it up to thousands of requests every second and the cost of a naieve operation like this adds up.
+
+Here’s an example of this approach:
+
+```js
+let cafes = []
+
+function getCafesInRange(x, y, searchRadius, cafes) {
+  return cafes.filter((pt) => {
+    const diff = { x: pt.x - x, y: pt.y - y }
+    const dist = diff.x * diff.x + diff.y * diff.y
+    return dist < searchRadius * searchRadius
+  })
+}
+
+getCafesInRange(30, 70, 20, cafes)
+```
+
+The `getCafesInRange` function takes a users position, a search radius and an array of cafe positions.  Every time the user requests cafes nearby we have iterate over every cafe position and test it against the user position and range.  This is a neat little function which may be all you need, but at scale you may need to optimize this for millions of users requests and hundreds of thousands of cafes.  Lets see if we can optimize this a little.
+
+## Spatial Hashing
+
+Spatial Hashing allows us to group 2 dimensional grid coordinates into grid cells and plot them into a 1 dimensional hash table, using the coordinates as the key.  We can specify a cell size for the grid and query a single cell, rather than every individual element, and because we store our cells in a hash table using our cordinates as the hash we have very fast insertion and access.
+
+Here’s an example of spatial hashing in action:
+
+
+<div style={{display:"flex", flexDirection:"row", width:"100%", justifyContent:"center", margin:0, overflow:"hidden"}}>
+  <iframe title="boids"  style={{width: "400px", height:"400px", margin:0, overflow:"hidden"}} src="https://spatial-hash-demo.vercel.app"></iframe>
+</div>
+
+Source code here: https://github.com/donanroherty/spatial-hash-demo.git
+
+### Insertion
+
+So lets unpack that with a little code….
+
+```js
+
+const hashtable = new Map() // Create the hash table
+const width = 100 // The width of the grid
+const height = 100  // The height of the grid
+const cellSize = 10  // The size of each cell
+
+/**
+ * Insert an item into the grid
+ * @param { { x: number, y: number } } item
+ */
+function insert(item) {
+  const { x, y } = item
+  const col = Math.floor(x / cellSize)
+  const row = Math.floor(y / cellSize)
+
+  const key = `${col},${row}`
+
+  if (hashtable.has(key)) {
+    hashtable.get(key).push(item)
+  } else {
+    hashtable.set(key, [item])
+  }
+}
+```
+
+Above we create a `hashtable` using JavaScripts Map data structure.  A Map uses a key string to set and get values stored inside it. `item` in this case is a simple object with an `x` and `y` position, by dividing these coordinates by the `cellSize` of our grid and flooring the result we get the row and column that the item exists within.  For example, if we have an item with `x=57`, `y= 33` and a cell size of `10` we will map this to `col` `5`, `row` `3`.
+
+Now we insert the item into the hash table using the `col` and `row` as the key.  If there is already an entry at this location we add our new item to the entries array, otherwise we create a new array and add it to `hashtable`. The beauty of this is that we only create entries in the Map if there is items for a given key, unlike an array which would require even empty cells to be represented.
+
+So to recap, use the coordinates of an item to generate a “column,row” key string and set it in the Map datastructure.
+
+### Box Query
+
+Now that we have our data indexed in the hash table, we want to query it for items within a range of reference point.  For example, if we want to find all cafes withing a certain radius of a user wecreate a box around the user position and find all grid cells that intersect with this box and return a Set of items within those cells.
+
+```js
+/**
+   * boxQuery returns all items that are in the box defined by the given parameters
+   * @param {number} x - x position of the box's center
+   * @param {number} y - y position of the box's center
+   * @param {number} width - width of the box
+   * @param {number} height - height of the box
+   * @param {boolean} [precise] if true, return items that are actually in the box
+   */
+  function boxQuery(x, y, width, height, precise = false) {
+    // get the range of cell indices that the box intersects
+    const xMin = Math.floor((x - width * 0.5) / cellSize)
+    const yMin = Math.floor((y - height * 0.5) / cellSize)
+    const xMax = Math.ceil((x + width * 0.5) / cellSize)
+    const yMax = Math.ceil((y + height * 0.5) / cellSize)
+
+    const s = new Set()
+
+    // for each cell, get the items in the cell and add them to the set
+    for (let x = xMin; x < xMax; x++) {
+      for (let y = yMin; y < yMax; y++) {
+        const hash = `${x},${y}`
+        if (hashtable.has(hash)) {
+          hashtable.get(hash).forEach((item) => {
+            if (precise) {
+              if (item.x >= x && item.y >= y && item.x < x + width && item.y < y + height) {
+                s.add(item)
+              }
+            } else {
+              s.add(item)
+            }
+          })
+        }
+      }
+    }
+
+    return s
+  }
+```
+
+In the code above, `boxQuery` takes an `x` and `y` parameter for the users position and a `width` and `height` of a box around that point.  We use this to find the range of rows and columns which lie within or are intersected by the search box: `xMin`, `yMin`, `xMax` and `yMax`.
+
+Now with 2 nested for loops we can lookup the hashed coordinates in the hash table add the items in that cell to a Set which is then returned from the function.
+
+You’ll notice I have a 5th parameter for boxQuery named `precise`.  If precise is false, the default, `boxQuery` will return all points in all cells that intersect with the search box, even if the point itself lies outside the boxes bounds.  Settin `precise` to true will ensure the query only returns points which are within the search box, but for many cases this inaccuracy may be uneccesary and improving performance with a cruder search may be more desirable.
+
+### Circle Query
+
+Above we used `boxQuery` to find the points within grid cells which intersect with our search box, but we started this pursuit looking to find all cafes within a circle around a user.  `circleQuery` wraps `boxQuery`, using a position and radius to create a search box and then testing each items distance from `x,y` before returning all points in a Set.
+
+```js
+/**
+ * circleQuery returns an array of items that are in the given circle
+ * @param {number} x
+ * @param {number} y
+ * @param {number} radius
+ */
+function circleQuery(x, y, radius) {
+  const boxQryRes = boxQuery(x, y, radius, radius)
+  const s = new Set()
+  boxQryRes.forEach((item) => {
+    const { itemX, itemY } = item
+    if ((itemX - x) ** 2 + (itemY - y) ** 2 <= radius * radius) {
+      s.add(item)
+    }
+  })
+
+  return s
+}
+```
+
+# Conclusion
+
+A spatial hash system allows us to map data to a hash table using cordinates as a map.  It is usful when we need to perform a large number of comparisons and our data can be mapped efficiently to a hash table.  I used the example of a user searching for cafes here, but this technique could be applied to a number of use cases such image compression, broad phase collision detection, aggregating social media users by group membership, organizing and querying search engine results and much more.
+
+Other optimization techniques exist which may be more applicable in different situations.  I have been playing with Quad Trees lately which serve a similar purpose of aggregating data to a tree data structure.  I hope to write another post soon on Quad Trees, Oct Trees and what makes them usful.
+
+✌️

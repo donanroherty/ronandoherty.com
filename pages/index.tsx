@@ -45,8 +45,8 @@ export default function Index({ posts, projects }: HomeProps) {
             date={p.frontmatter.date}
             description={p.frontmatter.description}
             thumbnail={p.frontmatter.thumbnail}
+            showDescription
             // showThumbnail
-            showDescription={false}
           />
         ))}
       </PostList>
