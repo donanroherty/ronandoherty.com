@@ -23,7 +23,7 @@ function PostListItem({
   slug,
   showThumbnail,
   showDate,
-  showDescription,
+  showDescription = false,
 }: PostListItemProps) {
   const willShowTN = showThumbnail && thumbnail
 
@@ -54,20 +54,22 @@ function PostListItem({
               </div>
             )}
 
-            <div className="flex flex-col">
+            <div className="flex flex-col justify-center">
               <div className="my-auto font-sans text-base font-bold transition-colors duration-500 sm:my-0 xs:text-xl text-heading dark:text-headingDark">
                 {title}
               </div>
 
-              <div
-                className={`
+              {showDescription && (
+                <div
+                  className={`
                  font-sans text-base transition-colors duration-500 
                 sm:block xs:text-lg text-subtitle dark:text-subtitleDark
-                ${showDescription && "hidden sm:block"}
+                ${!showDescription || (description.length === 0 && "hidden sm:block")}
                 `}
-              >
-                {description}
-              </div>
+                >
+                  {description}
+                </div>
+              )}
             </div>
           </a>
         </Link>
