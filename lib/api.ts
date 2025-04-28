@@ -1,73 +1,60 @@
-import { serialize } from "next-mdx-remote/serialize"
+import { compileMDX } from "next-mdx-remote/rsc";
+import path, { join } from "path";
 import fs from "fs"
-import { join } from "path"
-import matter from "gray-matter"
-import { PostHeaderData } from "../types/post"
-import * as Shiki from "shiki"
-import { Plugin } from "unified"
-import { visit } from "unist-util-visit"
+import MDXComponents from "../components/MDXComponents";
+import { PostHeaderData } from "../types/post";
 
-type ContentType = "blog" | "projects" | "pages"
+export type ContentType = "blog" | "projects" | "pages"
 
-function getPath(dir: ContentType) {
+export async function readMdx(slug: string, contentType: ContentType) {
+  const mdx = fs.readFileSync(path.join(getPath(contentType), `${slug}.mdx`), "utf-8")
+
+  return await compileMDX<PostHeaderData>({
+    source: mdx, options: {
+      parseFrontmatter: true, mdxOptions: {
+      }
+    },
+    components: MDXComponents,
+  })
+}
+
+
+export async function getAllPostFrontmatter(dir: ContentType) {
+  const allFiles = getFiles(dir)
+
+  const files = allFiles.map(
+    async (filename) => {
+      const slug = filename.replace(/\.mdx$/, "")
+      const mdx = fs.readFileSync(join(getPath(dir), filename), "utf-8")
+
+      const { frontmatter: fm } = await compileMDX<PostHeaderData>({
+        source: mdx, options: { parseFrontmatter: true }
+      })
+
+      const frontmatter: PostHeaderData = {
+        title: fm.title,
+        date: fm.date,
+        description: fm.description,
+        published: fm.published,
+        listed: fm.listed,
+        thumbnail: fm.thumbnail,
+      }
+      return { slug, frontmatter }
+    }
+  )
+
+  const sorted = (await (Promise.all(files))
+  ).sort(
+    (a, b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()
+  )
+
+  return sorted
+}
+
+export function getPath(dir: ContentType) {
   return join(process.cwd(), "_content", dir)
 }
 
 export function getFiles(dir: ContentType) {
   return fs.readdirSync(getPath(dir))
-}
-
-function plugin(options: {
-  highlighter: Shiki.Highlighter
-}): Plugin<[{ highlighter: Shiki.Highlighter }]> {
-  return function visitTree(tree) {
-    visit(tree, "code", pluginVisitor)
-
-    function pluginVisitor(node: any, idx: number | null, parent: any) {
-      if (!node.lang || node.lang.length === 0) return
-
-      node.type = "html"
-      node.children = undefined
-      node.value = options.highlighter
-        .codeToHtml(node.value, node.lang)
-        .replace(
-          '<pre class="shiki"',
-          `<pre class="shiki" language="${node.lang}" meta="${node.meta}"`
-        )
-    }
-  }
-}
-
-export async function getFileBySlug(slug: string, dir: ContentType) {
-  const file = fs.readFileSync(join(getPath(dir), `${slug}.mdx`), "utf-8")
-  const { data, content } = matter(file)
-
-  const highlighter = Shiki.createHighlighter({ themes: ['github-dark'] })
-
-  const mdxSource = await serialize(content, {
-    mdxOptions: {
-      remarkPlugins: [[plugin, { highlighter }]],
-    },
-  })
-
-  return {
-    mdxSource,
-    slug,
-    frontmatter: data as PostHeaderData,
-  }
-}
-
-export function getFilenameFromSlug(slug: string, dir: ContentType) {
-  const files = getFiles(dir).map((file) => file.replace(/\.md$/, ""))
-
-  if (files.find((file) => file === slug)) return slug
-
-  const slugFile = files.find((file) => {
-    const sepIdx = file.indexOf("--")
-    if (sepIdx) {
-      const substr = file.substr(sepIdx + 2)
-      return encodeURIComponent(substr) === slug
-    }
-  })
-  return slugFile
 }

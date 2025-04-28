@@ -7,7 +7,9 @@ type PageProps = {
 }
 
 export default async function Page(props: PageProps) {
-  const { content, frontmatter } = await readMdx(props.params.slug, "blog")
+  const params = await props.params
+
+  const { content, frontmatter } = await readMdx(params.slug, "blog")
 
   return (
     <PostPage frontmatter={frontmatter}>
