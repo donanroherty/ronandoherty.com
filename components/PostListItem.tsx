@@ -36,42 +36,41 @@ function PostListItem({
           </div>
         )}
 
-        <Link href={`/${slug}`}>
-          <a className={`flex justify-between w-full gap-4`}>
-            {willShowTN && (
-              <div
-                className={`
+        <Link href={`/${slug}`} className={`flex justify-between w-full gap-4`}>
+          {willShowTN && (
+            <div
+              className={`
                 relative order-last w-20 h-20 my-auto rounded-md overflow-hidden
               `}
-              >
-                <NextImage
-                  className="filter grayscale"
-                  src={thumbnail}
-                  layout="fill"
-                  objectFit="cover"
-                  objectPosition="50% 50%"
-                />
-              </div>
-            )}
+            >
+              <NextImage
+                alt="thumbnail"
+                className="filter grayscale"
+                src={thumbnail}
+                layout="fill"
+                objectFit="cover"
+                objectPosition="50% 50%"
+              />
+            </div>
+          )}
 
-            <div className="flex flex-col justify-center">
-              <div className="my-auto font-sans text-base font-bold transition-colors duration-500 sm:my-0 xs:text-xl text-heading dark:text-headingDark">
-                {title}
-              </div>
+          <div className="flex flex-col justify-center">
+            <div className="my-auto font-sans text-base font-bold transition-colors duration-500 sm:my-0 xs:text-xl text-heading dark:text-headingDark">
+              {title}
+            </div>
 
-              {showDescription && (
-                <div
-                  className={`
+            {showDescription && (
+              <div
+                className={`
                  font-sans text-base transition-colors duration-500 
                 sm:block xs:text-lg text-subtitle dark:text-subtitleDark
                 ${!showDescription || (description.length === 0 && "hidden sm:block")}
                 `}
-                >
-                  {description}
-                </div>
-              )}
-            </div>
-          </a>
+              >
+                {description}
+              </div>
+            )}
+          </div>
         </Link>
       </div>
     </div>

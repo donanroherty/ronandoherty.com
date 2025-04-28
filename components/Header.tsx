@@ -1,26 +1,23 @@
 import Link from "next/link"
 import React from "react"
 import Icon from "./Icon"
-import useTheme from "../state/ThemeProvider"
 
 function Header() {
-  const { toggleTheme } = useTheme()
+  // const { toggleTheme } = useTheme()
 
   return (
     <div className="pt-10">
       <div className="flex flex-row justify-between">
         {/* Brand */}
         <div>
-          <Link href="/">
-            <a className="flex-auto -space-y-2">
-              <div className="text-4xl font-extrabold transition-colors duration-500 select-none font-title xs:text-5xl text-title dark:text-titleDark">
-                Ronan
-              </div>
+          <Link href="/" className="flex-auto -space-y-2">
+            <div className="text-4xl font-extrabold transition-colors duration-500 select-none font-title xs:text-5xl text-title dark:text-titleDark">
+              Ronan
+            </div>
 
-              <div className="text-4xl font-extrabold transition-colors duration-500 select-none font-title xs:text-5xl text-title dark:text-titleDark">
-                Doherty
-              </div>
-            </a>
+            <div className="text-4xl font-extrabold transition-colors duration-500 select-none font-title xs:text-5xl text-title dark:text-titleDark">
+              Doherty
+            </div>
           </Link>
         </div>
         {/* Buttons */}
@@ -32,9 +29,7 @@ function Header() {
             />
           </div> */}
           <Link href="/about">
-            <a>
-              <Icon name="info" className="box-content w-5 pt-1 pb-1 pl-1 xs:w-6" />
-            </a>
+            <Icon name="info" className="box-content w-5 pt-1 pb-1 pl-1 xs:w-6" />
           </Link>
         </div>
       </div>

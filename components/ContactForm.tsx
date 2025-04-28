@@ -1,3 +1,6 @@
+"use client"
+
+import React from "react"
 import { Formik, FormikHelpers } from "formik"
 import { ContactFormType } from "../types/forms"
 import * as Yup from "yup"

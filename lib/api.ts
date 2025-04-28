@@ -42,7 +42,7 @@ export async function getFileBySlug(slug: string, dir: ContentType) {
   const file = fs.readFileSync(join(getPath(dir), `${slug}.mdx`), "utf-8")
   const { data, content } = matter(file)
 
-  const highlighter = await Shiki.getHighlighter({ theme: "github-dark" })
+  const highlighter = Shiki.createHighlighter({ themes: ['github-dark'] })
 
   const mdxSource = await serialize(content, {
     mdxOptions: {
@@ -55,31 +55,6 @@ export async function getFileBySlug(slug: string, dir: ContentType) {
     slug,
     frontmatter: data as PostHeaderData,
   }
-}
-
-export function getAllPostFrontmatter(dir: ContentType) {
-  const files: Array<{ slug: string; frontmatter: PostHeaderData }> = getFiles(dir).map(
-    (filename) => {
-      const slug = filename.replace(/\.mdx$/, "")
-      const file = fs.readFileSync(join(getPath(dir), filename), "utf-8")
-      const { data } = matter(file)
-      const frontmatter: PostHeaderData = {
-        title: data.title,
-        date: data.date,
-        description: data.description,
-        published: data.published,
-        listed: data.listed,
-        thumbnail: data.thumbnail,
-      }
-      return { slug, frontmatter }
-    }
-  )
-
-  const sorted = files.sort(
-    (a, b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()
-  )
-
-  return sorted
 }
 
 export function getFilenameFromSlug(slug: string, dir: ContentType) {

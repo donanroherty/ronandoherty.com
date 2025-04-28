@@ -1,20 +1,15 @@
 import React from "react"
 import Link from "next/link"
 import NextImage, { ImageProps } from "next/image"
-import { AnchorHTMLAttributes, DetailedHTMLProps } from "react"
-import path from "path"
 
 function CustomLink(
-  props: DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>
-) {
+  props: React.ComponentProps<'a'>) {
   const href = props.href
   const isInternalLink = href && (href.startsWith("/") || href.startsWith("#"))
 
   if (isInternalLink) {
     return (
-      <Link href={href || ""}>
-        <a {...props} />
-      </Link>
+      <Link href={href || ""} {...props} />
     )
   }
 
@@ -51,14 +46,14 @@ function YouTube(props: YouTubeProps) {
 function BoidsElement(props: any) {
   // @ts-ignore
   React.useEffect(() => import("../web-components/boids-element.mjs"), [])
+  // @ts-ignore
   return <boids-element {...props} />
 }
 
-const MDXComponents = {
+export default {
   a: CustomLink,
   Image,
   YouTube,
   "boids-element": BoidsElement,
 }
 
-export default MDXComponents

@@ -1,21 +1,23 @@
-import { InferGetStaticPropsType } from "next"
-import { getAllPostFrontmatter } from "../lib/api"
-import Head from "next/head"
-import PostList from "../components/PostList"
-import PostListItem from "../components/PostListItem"
+import PostList from "@/components/PostList";
+import PostListItem from "@/components/PostListItem";
+import { ContentType, getAllPostFrontmatter } from "@/lib/readMdx";
+import React from "react"
 
-type HomeProps = {} & InferGetStaticPropsType<typeof getStaticProps>
+export default async function Page() {
+  const getAllItemsOfType = async (contentType: ContentType) => {
+    const postData = await getAllPostFrontmatter(contentType)
+    return postData.filter((post) => post.frontmatter.published && post.frontmatter.listed)
+  }
 
-export default function Index({ posts, projects }: HomeProps) {
+  const posts = await getAllItemsOfType("blog")
+  const projects = await getAllItemsOfType("projects")
+
   return (
     <div>
-      <Head>
-        <title>Home - RonanDoherty.com</title>
-      </Head>
 
       <PostList
         title="Posts"
-        // itemMax={3}
+      // itemMax={3}
       >
         {posts.map((p) => (
           <PostListItem
@@ -35,7 +37,7 @@ export default function Index({ posts, projects }: HomeProps) {
       <PostList
         title="Projects"
         multiCol
-        // itemMax={2}
+      // itemMax={2}
       >
         {projects.map((p) => (
           <PostListItem
@@ -46,7 +48,7 @@ export default function Index({ posts, projects }: HomeProps) {
             description={p.frontmatter.description}
             thumbnail={p.frontmatter.thumbnail}
             showDescription
-            // showThumbnail
+          // showThumbnail
           />
         ))}
       </PostList>
@@ -54,21 +56,4 @@ export default function Index({ posts, projects }: HomeProps) {
       <footer></footer>
     </div>
   )
-}
-
-export async function getStaticProps() {
-  const posts = getAllPostFrontmatter("blog").filter(
-    (post) => post.frontmatter.published && post.frontmatter.listed
-  )
-
-  const projects = getAllPostFrontmatter("projects").filter(
-    (post) => post.frontmatter.published && post.frontmatter.listed
-  )
-
-  return {
-    props: {
-      posts,
-      projects,
-    },
-  }
 }

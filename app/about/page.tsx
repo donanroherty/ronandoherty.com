@@ -1,25 +1,16 @@
 import React from "react"
-import { getFileBySlug } from "../lib/api"
-import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote"
-import PostPage from "../components/PostPage"
-import { PostHeaderData } from "../types/post"
-import MDXComponents from "../components/MDXComponents"
-import ContactForm from "../components/ContactForm"
-import Icon from "../components/Icon"
+import PostPage from "../../components/PostPage"
+import Icon from "../../components/Icon"
+import ContactForm from "../../components/ContactForm"
+import { readMdx } from "../../lib/readMdx"
 
-type AboutPropTypes = {
-  mdxSource: MDXRemoteSerializeResult
-  slug: string
-  frontmatter: PostHeaderData
-}
+export default async function Page() {
+  const { content, frontmatter } = await readMdx("about", "pages")
 
-export default function About({ mdxSource, slug, frontmatter }: AboutPropTypes) {
   return (
     <div className="space-y-6">
-      <PostPage frontmatter={frontmatter} hideDate>
-        <MDXRemote {...mdxSource} components={MDXComponents} />
-
-        {/* {content} */}
+      <PostPage frontmatter={frontmatter}>
+        {content}
       </PostPage>
 
       {/* Social links */}
@@ -44,15 +35,8 @@ export default function About({ mdxSource, slug, frontmatter }: AboutPropTypes) 
           <div className="">linkedin.com/in/ronan-doherty-dev</div>
         </a>
       </div>
-
       <div className="">
         <ContactForm />
       </div>
-    </div>
-  )
-}
-
-export async function getStaticProps() {
-  const postData = await getFileBySlug("about", "pages")
-  return { props: postData }
+    </div>)
 }
