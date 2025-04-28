@@ -3,11 +3,13 @@ import PostPage from "../../../components/PostPage";
 import { getAllPostFrontmatter, readMdx } from "../../../lib/readMdx";
 
 type PageProps = {
-  params: { slug: string; };
+  params: Promise<{ slug: string; }>;
 }
 
 export default async function Page(props: PageProps) {
-  const { content, frontmatter } = await readMdx(props.params.slug, "projects")
+  const params = await props.params
+
+  const { content, frontmatter } = await readMdx(params.slug, "projects")
 
   return (
     <PostPage frontmatter={frontmatter}>

@@ -1,0 +1,27 @@
+# Ignore everything
+*
+
+# Allow specific files and directories
+!package.json
+!pnpm-lock.yaml
+!app/
+!public/
+!components/
+!lib/
+!styles/
+!types/
+!_content/
+!@types/
+!tailwind.config.js
+!postcss.config.js
+!next.config.ts
+!tsconfig.json
+!web-components/
+
+# Ignore unnecessary files inside allowed directories
+**/.git
+**/.DS_Store
+**/*.md
+**/node_modules
+*.log
+.next
