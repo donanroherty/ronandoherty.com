@@ -1,7 +1,7 @@
 // const withPlugins = require("next-compose-plugins")
 
 const withMDX = require("@next/mdx")({
-  extension: /\.mdx?$/,
+  extension: /\.(md|mdx)$/,
   options: {
     remarkPlugins: [],
     rehypePlugins: [],
